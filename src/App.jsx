@@ -4,22 +4,22 @@ import * as Y from "yjs";
 import {WebrtcProvider} from "y-webrtc"
 import { MonacoBinding } from 'y-monaco';
 import { useParams } from 'react-router-dom';
-import os from 'os'
+import config from '../backend/config.json'
 
 function App() {
   
   let { hash } = useParams();
-  console.log("Hash is " + hash);
+  const hostname = config.SERVER_URL;
+  const port = config.PORT;
+  console.log("API is " + config.SERVER_URL);
 
   const editorRef = useRef(null)
-  let docName = "myContent";
 
   function handleEditorDidMount(editor, monaco) {
-    const hostname = os.hostname()
     editorRef.current = editor;
     const doc = new Y.Doc();
-    const provider = new WebrtcProvider(hash, doc, { signaling: ['ws://localhost:14444'] });
-    const type = doc.getText(docName);
+    const provider = new WebrtcProvider(hash, doc, { signaling: [`ws://${hostname}:${port}`] });
+    const type = doc.getText("monaco");
     const binding = new MonacoBinding(type, editorRef.current.getModel(), new Set([editorRef.current]), provider.awareness);
     console.log(provider.awareness);
   }
