@@ -4,6 +4,7 @@ import ws from 'ws'
 import http from 'http'
 import * as map from 'lib0/map'
 import os from 'os'
+import config from './config.json' assert { type: "json" }
 
 const wsReadyStateConnecting = 0
 const wsReadyStateOpen = 1
@@ -12,7 +13,7 @@ const wsReadyStateClosed = 3 // eslint-disable-line
 
 const pingTimeout = 30000
 
-const port = process.env.PORT || 14444
+const port = config.SIGNALLING_PORT
 // @ts-ignore
 const wss = new ws.Server({ noServer: true })
 
@@ -32,7 +33,6 @@ const topics = new Map()
  * @param {object} message
  */
 const send = (conn, message) => {
-  console.log("Msg : " + JSON.stringify(message) );
   if (conn.readyState !== wsReadyStateConnecting && conn.readyState !== wsReadyStateOpen) {
     conn.close()
   }
@@ -83,7 +83,6 @@ const onconnection = conn => {
     closed = true
   })
   conn.on('message', /** @param {object} message */ message => {
-    console.log("Server: " + message);
     if (typeof message === 'string') {
       message = JSON.parse(message)
     }
@@ -138,7 +137,7 @@ server.on('upgrade', (request, socket, head) => {
   wss.handleUpgrade(request, socket, head, handleAuth)
 })
 
-const hostname = os.hostname
+const hostname = config.SERVER_URL
 server.listen(port, hostname)
 
 console.log('Signaling server running on ', hostname + ":" + port)
