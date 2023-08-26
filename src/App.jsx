@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react'
+import { useRef } from 'react'
 import Editor from "@monaco-editor/react"
 import * as Y from "yjs";
 import {WebrtcProvider} from "y-webrtc"
@@ -10,7 +10,7 @@ function App() {
   
   let { hash } = useParams();
   const hostname = config.SERVER_URL;
-  const port = config.PORT;
+  const port = config.SIGNALLING_PORT;
   console.log("API is " + config.SERVER_URL);
 
   const editorRef = useRef(null)

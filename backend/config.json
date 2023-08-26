@@ -1,4 +1,4 @@
 {
     "SERVER_URL": "localhost",
-    "PORT": 14444
+    "SIGNALLING_PORT": 14444
 }

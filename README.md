@@ -1,21 +1,33 @@
+# Introduction
+This is light weight realtime text collabation tool. It has the following key components
+
+1. [YJS](https://docs.yjs.dev/) for [CRDT](https://en.wikipedia.org/wiki/Conflict-free_replicated_data_type)
+2. [Monaco](https://microsoft.github.io/monaco-editor/) for editor
+3. [WebRTC](https://webrtc.org/) as communication protocol
+----
+
 # Build 
-
-
 ## Requirements
 
 - node v18.0.0
 - npm 9.8.1
 
 ## Starting the backend
-We need to start the signalling server first
+
+This editor needs a [signalling server](https://www.wowza.com/blog/webrtc-signaling-servers). We will explain how to start the server.
+
+Go to [config.json](/backend/config.json) and edit the SERVER_URL to the IP address of the machine where you will be running the server. You can choose to change the SIGNALLING PORT if you want.
+
+We need to start the signalling server
+
 ```
+npm install
 cd backend
 node server.js
 ```
 
-## Compiling frontend
+## Starting frontend
 ```
-npm install
 npm run dev
 ```
 ## Deployment frontend
