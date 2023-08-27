@@ -28,7 +28,7 @@ function App() {
     head.appendChild(s);
   }
 
-  function updateYRemoteCSS(currentColorCode, userHash) {
+  function updateYRemoteCSS(currentColorCode, userHash, name) {
 
     const yRemoteSelectionAttr = `.yRemoteSelection-${userHash}`;
     const yRemoteSelectionHeadAttr = `.yRemoteSelectionHead-${userHash}`;
@@ -47,7 +47,7 @@ function App() {
       }
       ${yRemoteSelectionHeadAfterAttr} {
           position: absolute;
-          content: '${userHash}';
+          content: '${name}';
           border-left: 4px solid ${currentColorCode};
           border-right: 4px solid ${currentColorCode};
           top: -22px;
@@ -60,37 +60,56 @@ function App() {
     addCSS(css)
   }
 
+  function initUserCSS(clientID, color, name) {
+
+    const clientId = clientID;
+    const colorHash = color;
+    if (userColorState[clientId]) return;
+    userColorState[clientId] = color;
+    updateYRemoteCSS(colorHash, clientId, name);
+
+  }
+
+  function notifyUserPresence(clientID, currentColorCode, awareness) {
+
+    awareness.setLocalStateField('user', {
+      clientID: clientID ,
+      color: currentColorCode,
+      name: "Guest: " + Array.from(awareness.getStates().values()).length + 1
+    });
+
+    awareness.on('update', changes => {
+      const docStates = Array.from(awareness.getStates().values());
+      docStates.forEach(x => {
+        const user = x['user'];
+        if (user) initUserCSS(user.clientID, user.color, user.name);
+      });
+    });
+  }
+
+  function handleUserAddition(yDoc) {
+    // TODO We need to handle user addition
+  }
+
   function handleEditorDidMount(editor, monaco) {
 
-    const curentUser = generateRandomString(6)
     const currentColorCode = generateRandomColor()
     const doc = new Y.Doc();
     const provider = new WebrtcProvider(hash, doc, { signaling: [`ws://${hostname}:${port}`] });
     const type = doc.getText("monaco");
     const awareness = provider.awareness
 
-    editorRef.current = editor;
-    new MonacoBinding(type, editorRef.current.getModel(), new Set([editorRef.current]), provider.awareness);
+    handleUserAddition(doc);
 
-    awareness.setLocalStateField('user', {
-      clientID: doc.clientID,
-      color: currentColorCode,
-      updatedCSS: false
-    });
-    awareness.on('update', changes => {
-      console.log(Array.from(awareness.getStates().values()));
-      Array.from(awareness.getStates().values()).forEach(x => {
-        const user = x['user'];
-        if (user) {
-          const clientId = user.clientID;
-          const colorHash = user.color;
-          if (userColorState[clientId]) return;
-          userColorState[clientId] = colorHash;
-          user.updatedCSS = true;
-          updateYRemoteCSS(colorHash, clientId);
-        }
-      });
-    });
+    editorRef.current = editor;
+    new MonacoBinding(
+      type,
+      editorRef.current.getModel(),
+      new Set([editorRef.current]),
+      awareness);
+
+    notifyUserPresence(doc.clientID, currentColorCode, awareness);
+
   }
 
   function generateRandomColor() {
@@ -101,19 +120,7 @@ function App() {
     let randColor = randomNumber.padStart(6, 0);
     return `#${randColor.toUpperCase()}`
   }
-
-  function generateRandomString(length) {
-    const characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    let randomString = '';
-
-    for (let i = 0; i < length; i++) {
-      const randomIndex = Math.floor(Math.random() * characters.length);
-      randomString += characters[randomIndex];
-    }
-
-    return randomString;
-  }
-
+  
   function updateCSSPty(className, pty, value) {
     elements = document.querySelectorAll(`.${className}`);
     elements.forEach(element => {
