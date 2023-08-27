@@ -7,12 +7,15 @@ import { useParams } from 'react-router-dom';
 import config from '../backend/config.json'
 
 function App() {
+
+  const userColorState = {}
+
   let { hash } = useParams();
   const hostname = config.SERVER_URL;
   const port = config.SIGNALLING_PORT;
   const editorRef = useRef(null)
 
-  function addcss(css) {
+  function addCSS(css) {
 
     var head = document.getElementsByTagName('head')[0];
     var s = document.createElement('style');
@@ -50,10 +53,11 @@ function App() {
           top: -22px;
           left: -2px;
           background-color: ${currentColorCode} ;
+          font-size: 7px;
       }
     `;
 
-    addcss(css)
+    addCSS(css)
   }
 
   function handleEditorDidMount(editor, monaco) {
@@ -80,6 +84,8 @@ function App() {
         if (user) {
           const clientId = user.clientID;
           const colorHash = user.color;
+          if (userColorState[clientId]) return;
+          userColorState[clientId] = colorHash;
           user.updatedCSS = true;
           updateYRemoteCSS(colorHash, clientId);
         }
