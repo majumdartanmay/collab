@@ -8,13 +8,14 @@ import config from '../backend/config.json'
 import { CssBaseline } from '@mui/material';
 import { useCookies } from "react-cookie";
 import { useAtom } from 'jotai';
+import { useNavigate, /* other hooks */ } from 'react-router-dom';
 
 function App() {
   // hooks
   let { hash } = useParams();
   const [cookies, setCookie] = useCookies(["user"]);
   const editorRef = useRef(null)
-
+  const navigate = useNavigate();
   // variables
   const hostname = config.SERVER_URL;
   const port = config.SIGNALLING_PORT;
@@ -101,6 +102,10 @@ function App() {
   function handleEditorDidMount(editor, monaco) {
 
     const userName = cookies.username;
+    if (!userName) {
+      navigate("/");
+      return;
+    }
     const currentColorCode = generateRandomColor()
     const doc = new Y.Doc();
     const provider = new WebrtcProvider(hash, doc, { signaling: [`ws://${hostname}:${port}`] });
