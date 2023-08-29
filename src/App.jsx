@@ -5,15 +5,20 @@ import { WebrtcProvider } from "y-webrtc"
 import { MonacoBinding } from 'y-monaco';
 import { useParams } from 'react-router-dom';
 import config from '../backend/config.json'
+import { CssBaseline } from '@mui/material';
+import { useCookies } from "react-cookie";
+import { useAtom } from 'jotai';
 
 function App() {
-
-  const userColorState = {}
-
+  // hooks
   let { hash } = useParams();
+  const [cookies, setCookie] = useCookies(["user"]);
+  const editorRef = useRef(null)
+
+  // variables
   const hostname = config.SERVER_URL;
   const port = config.SIGNALLING_PORT;
-  const editorRef = useRef(null)
+  const userColorState = {}
 
   function addCSS(css) {
 
@@ -53,7 +58,7 @@ function App() {
           top: -22px;
           left: -2px;
           background-color: ${currentColorCode} ;
-          font-size: 7px;
+          font-size: 10px;
       }
     `;
 
@@ -70,36 +75,37 @@ function App() {
 
   }
 
-  function notifyUserPresence(clientID, currentColorCode, awareness) {
+  function notifyUserPresence(clientID, currentColorCode, awareness, userName) {
 
     awareness.setLocalStateField('user', {
-      clientID: clientID ,
+      clientID: clientID,
       color: currentColorCode,
-      name: "Guest: " + Array.from(awareness.getStates().values()).length + 1
+      name: userName
     });
 
     awareness.on('update', changes => {
       const docStates = Array.from(awareness.getStates().values());
       docStates.forEach(x => {
         const user = x['user'];
-        if (user) initUserCSS(user.clientID, user.color, user.name);
+        if (user) {
+          initUserCSS(user.clientID, user.color, user.name);
+          handleUserAddition(user.clientID, user.name);
+        }
       });
     });
   }
 
-  function handleUserAddition(yDoc) {
-    // TODO We need to handle user addition
+  function handleUserAddition(clientId, userId) {
   }
 
   function handleEditorDidMount(editor, monaco) {
 
+    const userName = cookies.username;
     const currentColorCode = generateRandomColor()
     const doc = new Y.Doc();
     const provider = new WebrtcProvider(hash, doc, { signaling: [`ws://${hostname}:${port}`] });
     const type = doc.getText("monaco");
     const awareness = provider.awareness
-
-    handleUserAddition(doc);
 
     editorRef.current = editor;
     new MonacoBinding(
@@ -108,7 +114,7 @@ function App() {
       new Set([editorRef.current]),
       awareness);
 
-    notifyUserPresence(doc.clientID, currentColorCode, awareness);
+    notifyUserPresence(doc.clientID, currentColorCode, awareness, userName);
 
   }
 
@@ -120,7 +126,7 @@ function App() {
     let randColor = randomNumber.padStart(6, 0);
     return `#${randColor.toUpperCase()}`
   }
-  
+
   function updateCSSPty(className, pty, value) {
     elements = document.querySelectorAll(`.${className}`);
     elements.forEach(element => {
@@ -129,12 +135,15 @@ function App() {
   }
 
   return (
-    <Editor
-      height="100vh"
-      width="100vw"
-      theme='vs-dark'
-      onMount={handleEditorDidMount}
-    />
+    <div>
+      <CssBaseline />
+      <Editor
+        height="100vh"
+        width="100vw"
+        theme='vs-dark'
+        onMount={handleEditorDidMount}
+      />
+    </div>
   )
 }
 
