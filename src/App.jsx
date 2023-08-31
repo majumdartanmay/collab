@@ -1,21 +1,43 @@
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import Editor from "@monaco-editor/react"
 import * as Y from "yjs";
 import { WebrtcProvider } from "y-webrtc"
 import { MonacoBinding } from 'y-monaco';
 import { useParams } from 'react-router-dom';
 import config from '../backend/config.json'
-import { CssBaseline } from '@mui/material';
 import { useCookies } from "react-cookie";
-import { useAtom } from 'jotai';
 import { useNavigate, /* other hooks */ } from 'react-router-dom';
+import './App.css';
+import CollabPrompt from './utils/CollabPrompt';
+import { roomExists, logDebug, addRoomMetadata } from './utils/WebrtcUtils'
+
+const requirePasswordProps = {
+  prompt: "Please enter the password",
+  processPwd: verifyPwd
+}
+
+const createPasswordProps = {
+  prompt: "You are creating a new room. Please create a password which everyone will use.",
+  processPwd: addPasswordToRoom,
+  room: null
+}
+
+function verifyPwd(pwd, room) {
+  console.log("Very pwd " + pwd + " " + room);
+} 
+
+function addPasswordToRoom(pwd, room) {
+  addRoomMetadata(pwd, room);
+}
 
 function App() {
   // hooks
   let { hash } = useParams();
   const [cookies, setCookie] = useCookies(["user"]);
+  const [admin, setAdmin] = useState(false);
   const editorRef = useRef(null)
   const navigate = useNavigate();
+
   // variables
   const hostname = config.SERVER_URL;
   const port = config.SIGNALLING_PORT;
@@ -99,6 +121,12 @@ function App() {
   function handleUserAddition(clientId, userId) {
   }
 
+  function handleUserAuth(roomName) {
+    const exists = roomExists(roomName);
+    logDebug("Exists @ " + exists);
+    setAdmin(!exists);
+  }
+
   function handleEditorDidMount(editor, monaco) {
 
     const userName = cookies.username;
@@ -106,6 +134,12 @@ function App() {
       navigate("/");
       return;
     }
+    handleUserAuth(hash);
+    provisionMonacoEditor(userName, editor);
+  }
+
+  function provisionMonacoEditor(userName, editor) {
+
     const currentColorCode = generateRandomColor()
     const doc = new Y.Doc();
     const provider = new WebrtcProvider(hash, doc, { signaling: [`ws://${hostname}:${port}`] });
@@ -120,7 +154,6 @@ function App() {
       awareness);
 
     notifyUserPresence(doc.clientID, currentColorCode, awareness, userName);
-
   }
 
   function generateRandomColor() {
@@ -132,22 +165,17 @@ function App() {
     return `#${randColor.toUpperCase()}`
   }
 
-  function updateCSSPty(className, pty, value) {
-    elements = document.querySelectorAll(`.${className}`);
-    elements.forEach(element => {
-      element.style[pty] = value;
-    });
-  }
 
   return (
-    <div>
-      <CssBaseline />
-      <Editor
-        height="100vh"
-        width="100vw"
-        theme='vs-dark'
-        onMount={handleEditorDidMount}
-      />
+    <div id="app-container">
+      <CollabPrompt data = {admin ? createPasswordProps : requirePasswordProps} room  = { hash } />
+      <div id="editor-container">
+        <Editor
+          height="100vh"
+          width="100vw"
+          onMount={handleEditorDidMount}
+        />
+      </div>
     </div>
   )
 }

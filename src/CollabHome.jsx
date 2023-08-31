@@ -28,10 +28,14 @@ function Copyright(props) {
     );
 }
 
+// const defaultTheme = createTheme({
+//     palette: {
+//         mode: 'dark',
+//     },
+// });
+
 const defaultTheme = createTheme({
-    palette: {
-        mode: 'dark',
-    },
+
 });
 
 const userIdTVErrorAtom = atom(false);
