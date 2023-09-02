@@ -6,8 +6,11 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import { useNavigate, /* other hooks */ } from 'react-router-dom';
 
 export default function CollabPrompt(props) {
+
+  const navigate = useNavigate();
 
   function handleSumbit(event) {
     event.preventDefault();
@@ -15,10 +18,18 @@ export default function CollabPrompt(props) {
     props.data.processPwd(password, props.room);
   }
 
+  function goToHome() {
+    navigate("/");
+  }
+  
+  function handleCancel(e) {
+    goToHome();
+  }
+
   return (
     <div>
       <div id="collab-prompt">
-        <Dialog open>
+        <Dialog open = {props.open}>
           <DialogTitle>Alert</DialogTitle>
           <DialogContent>
             <DialogContentText>
@@ -32,10 +43,12 @@ export default function CollabPrompt(props) {
               type="password"
               fullWidth
               variant="standard"
+              helperText = {props.error}
+              error = {props.error != ''}
             />
           </DialogContent>
           <DialogActions>
-            <Button>Cancel</Button>
+            <Button onClick={handleCancel}>Cancel</Button>
             <Button onClick={handleSumbit}>OK</Button>
           </DialogActions>
         </Dialog>
