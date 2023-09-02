@@ -9,32 +9,17 @@ import { useCookies } from "react-cookie";
 import { useNavigate, /* other hooks */ } from 'react-router-dom';
 import './App.css';
 import CollabPrompt from './utils/CollabPrompt';
-import { roomExists, logDebug, addRoomMetadata } from './utils/WebrtcUtils'
+import { roomExists, logDebug, addRoomMetadata , verifyRoomPwd } from './utils/WebrtcUtils'
 
-const requirePasswordProps = {
-  prompt: "Please enter the password",
-  processPwd: verifyPwd
-}
-
-const createPasswordProps = {
-  prompt: "You are creating a new room. Please create a password which everyone will use.",
-  processPwd: addPasswordToRoom,
-  room: null
-}
-
-function verifyPwd(pwd, room) {
-  console.log("Very pwd " + pwd + " " + room);
-} 
-
-function addPasswordToRoom(pwd, room) {
-  addRoomMetadata(pwd, room);
-}
 
 function App() {
+
   // hooks
   let { hash } = useParams();
   const [cookies, setCookie] = useCookies(["user"]);
   const [admin, setAdmin] = useState(false);
+  const [authFailedErrorMsg, setAuthFailedErrorMsg] = useState('');
+  const [promptOpened, setPromptOpened] = useState(false);
   const editorRef = useRef(null)
   const navigate = useNavigate();
 
@@ -42,6 +27,31 @@ function App() {
   const hostname = config.SERVER_URL;
   const port = config.SIGNALLING_PORT;
   const userColorState = {}
+
+  const requirePasswordProps = {
+    prompt: "Please enter the password",
+    processPwd: verifyPwd
+  }
+
+  const createPasswordProps = {
+    prompt: "You are creating a new room. Please create a password which everyone will use.",
+    processPwd: addPasswordToRoom,
+    room: null
+  }
+
+  function verifyPwd(pwd, room) {
+    if (verifyRoomPwd(room, pwd)) {
+      setPromptOpened(false);
+    }else {
+      setAuthFailedErrorMsg('Password is not correct.');
+    }
+  }
+
+  function addPasswordToRoom(pwd, room) {
+    addRoomMetadata(room, pwd);
+    setPromptOpened(false);
+  }
+
 
   function addCSS(css) {
 
@@ -125,6 +135,7 @@ function App() {
     const exists = roomExists(roomName);
     logDebug("Exists @ " + exists);
     setAdmin(!exists);
+    setPromptOpened(true);
   }
 
   function handleEditorDidMount(editor, monaco) {
@@ -168,7 +179,7 @@ function App() {
 
   return (
     <div id="app-container">
-      <CollabPrompt data = {admin ? createPasswordProps : requirePasswordProps} room  = { hash } />
+      <CollabPrompt data={admin ? createPasswordProps : requirePasswordProps} room={hash} open={promptOpened} error = {authFailedErrorMsg}/>
       <div id="editor-container">
         <Editor
           height="100vh"

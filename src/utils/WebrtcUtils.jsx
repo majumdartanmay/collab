@@ -13,7 +13,7 @@ const userKey = 'users';
 const roomKey = 'rooms'
 const ymap = doc.getMap('metadata');
 ymap.set(userKey, ymap.get(userKey) || new Y.Array(userKey));
-ymap.set(roomKey, ymap.get(roomKey) || new Y.Map());
+const roomYMap = doc.getMap(roomKey); 
 
 export function logDebug(s) {
     if (debug) console.log(s);
@@ -34,32 +34,18 @@ function updateYDoc() {
 }
 
 export function addRoomMetadata(room, pwd)  {
-    updateYDoc();
-    const roomY = ymap.get(roomKey);
-    roomY.set(room, pwd);
-    ymap.set(roomKey, roomY);
-    const roomMap = roomY.toJSON();
-    logDebug("Printing room map " + roomMap);
+    roomYMap.set(room, pwd);
 }
 
 export function roomExists(room) {
-    logDebug("Calling roomExists");
-    const roomMetadata = getRoomMap();
-    const output =  roomMetadata[room] != undefined && roomMetadata[room] != null;
-    logDebug(`roomExists(${room}) : ${output}`);
-    return output;
+    logDebug(`Room json ${JSON.stringify(roomYMap.toJSON())}`);
+    const exists = roomYMap.get(room) != undefined;
+    logDebug(`Room exists : ${exists}`);
+    return exists;
 }
 
-export function verifyPwd(room, pwd) {
-    const roomMetadata = getRoomMap();
-    return roomMetadata[room] === pwd;
-}
-
-function getRoomMap() {
-    updateYDoc();
-    const roomY = ymap.get(roomKey);
-    const roomMetadata = roomY.toJSON();
-    return roomMetadata;
+export function verifyRoomPwd(room, pwd) {
+    return roomYMap.get(room) === pwd;
 }
 
 export function getYUsersInWebrtc() {
