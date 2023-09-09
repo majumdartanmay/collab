@@ -20,7 +20,8 @@ function App() {
   const [admin, setAdmin] = useState(false);
   const [authFailedErrorMsg, setAuthFailedErrorMsg] = useState('');
   const [promptOpened, setPromptOpened] = useState(false);
-  const editorRef = useRef(null)
+  const editorRef = useRef(null);
+  const userNameRef = useRef(null);
   const navigate = useNavigate();
 
   // variables
@@ -42,6 +43,7 @@ function App() {
   function verifyPwd(pwd, room) {
     if (verifyRoomPwd(room, pwd)) {
       setPromptOpened(false);
+      provisionMonacoEditor();
     }else {
       setAuthFailedErrorMsg('Password is not correct.');
     }
@@ -50,6 +52,7 @@ function App() {
   function addPasswordToRoom(pwd, room) {
     addRoomMetadata(room, pwd);
     setPromptOpened(false);
+    provisionMonacoEditor();
   }
 
 
@@ -145,19 +148,19 @@ function App() {
       navigate("/");
       return;
     }
+    editorRef.current = editor;
+    userNameRef.current = userName;
     handleUserAuth(hash);
-    provisionMonacoEditor(userName, editor);
   }
 
-  function provisionMonacoEditor(userName, editor) {
-
+  function provisionMonacoEditor() {
+    const userName = userNameRef.current;
     const currentColorCode = generateRandomColor()
     const doc = new Y.Doc();
     const provider = new WebrtcProvider(hash, doc, { signaling: [`ws://${hostname}:${port}`] });
     const type = doc.getText("monaco");
     const awareness = provider.awareness
 
-    editorRef.current = editor;
     new MonacoBinding(
       type,
       editorRef.current.getModel(),
