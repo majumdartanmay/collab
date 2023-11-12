@@ -1,0 +1,11 @@
+{
+    "PORT": 14555,
+    "DB": {
+        "host": "localhost",
+        "user": "collab_user",
+        "password": "Collab_11122023",
+        "database": "collab",
+        "connectTimeout": 60000
+    },
+    "SALT_LENGTH": 7
+}

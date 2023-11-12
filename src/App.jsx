@@ -76,15 +76,15 @@ function App() {
     const yRemoteSelectionHeadAfterAttr = `.yRemoteSelectionHead-${userHash}::after`;
     const css = `
       ${yRemoteSelectionAttr} {
-          background-color: red 
+          background-color: ${currentColorCode}; 
       }
       ${yRemoteSelectionHeadAttr} {
           position: absolute;
           border-left: ${currentColorCode} solid 2px;
           border-top: ${currentColorCode} solid 4px;
           border-bottom: ${currentColorCode} solid 2px;
-          height: 100%;
-          box-sizing: border-box;
+          height: 60%;
+          animation: blink 1s linear infinite;
       }
       ${yRemoteSelectionHeadAfterAttr} {
           position: absolute;
@@ -95,6 +95,10 @@ function App() {
           left: -2px;
           background-color: ${currentColorCode} ;
           font-size: 10px;
+          animation: fadeOut 8s;
+          animation-iteration-count: infinite;
+          animation-fill-mode: forwards;
+
       }
     `;
 
@@ -171,12 +175,26 @@ function App() {
   }
 
   function generateRandomColor() {
-    let maxVal = 0xFFFFFF; // 16777215
+    const colorHashCodes = [
+      "#FF5733",
+      "#33FF57",
+      "#5733FF",
+      "#FF33A1",
+      "#33A1FF",
+      "#A1FF33",
+      "#FF3361",
+      "#3361FF",
+      "#61FF33",
+      "#FF33F7",
+      "#33F7FF",
+      "#F7FF33"
+    ];
+    let maxVal = colorHashCodes.length - 1;
     let randomNumber = Math.random() * maxVal;
     randomNumber = Math.floor(randomNumber);
     randomNumber = randomNumber.toString(16);
     let randColor = randomNumber.padStart(6, 0);
-    return `#${randColor.toUpperCase()}`
+    return colorHashCodes[randomNumber];
   }
 
 
