@@ -1,11 +1,8 @@
 #!/usr/bin/env node
 
-import ws from 'ws'
-import http from 'http'
-import * as map from 'lib0/map'
-import os from 'os'
-import config from './config.json' assert { type: "json" }
-
+const http = require('http');
+const ws = require('ws');
+const config = require('./config.json');
 const wsReadyStateConnecting = 0
 const wsReadyStateOpen = 1
 const wsReadyStateClosing = 2 // eslint-disable-line
