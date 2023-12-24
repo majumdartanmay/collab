@@ -11,23 +11,14 @@ GRANT SELECT, INSERT, UPDATE, DELETE ON collab.* TO '<MYSQL_USER>'@'%';
 
 -- Create Tables
 
-CREATE TABLE IF NOT EXISTS <MYSQL_DATABASE>.<MYSQL_TABLE>
-(
-   id            INT(10) NOT NULL AUTO_INCREMENT,
-   username      VARCHAR(255)
-                   CHARACTER SET utf8mb4
-                   COLLATE utf8mb4_0900_ai_ci
-                   NOT NULL,
-   secret        TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-   created_on    TIMESTAMP(0) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-   PRIMARY KEY(id),
-   UNIQUE KEY username_unq(username)
-)
-ENGINE INNODB
-COLLATE 'utf8mb4_0900_ai_ci'
-ROW_FORMAT DEFAULT;
+CREATE TABLE users (
+    roomId VARCHAR(255) NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    username VARCHAR(255) NOT NULL,
+    PRIMARY KEY (roomId, username)
+);
 
--- Create heltch check tables
+-- Create health check tables
 
 -- Create the 'health_check' table
 CREATE TABLE IF NOT EXISTS <MYSQL_DATABASE>.<MYSQL_HEALTH_TABLE> (

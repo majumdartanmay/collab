@@ -38,7 +38,7 @@ app.post("/login", async function (req, res, next) {
     try {
         const pwd = await getSecret(req.body.username);
         if (!pwd) {
-            res.json({sattus: "NOT_FOUND", message: "User not found"});
+            res.json({status: "NOT_FOUND", message: "User not found"});
             return;
         }
 
@@ -51,10 +51,6 @@ app.post("/login", async function (req, res, next) {
     } catch (err) {
         next(err);
     }
-});
-
-app.listen(port, () => {
-    console.log(`DB backend app listening at http://${config.BACKEND_SERVER}:${port}`);
 });
 
 async function query(sql, params) {
@@ -89,3 +85,8 @@ app.get("/healthcheck", async function (req, res, next) {
     res.json(rows);
 });
 
+app.listen(port, () => {
+    console.log(`Backend app is listening at http://${config.BACKEND_SERVER}:${port}. 
+    Call http://${config.BACKEND_SERVER}:${port}/healthcheck to see 
+    if we have established DB connectivity`);
+});
