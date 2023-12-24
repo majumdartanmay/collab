@@ -12,7 +12,9 @@ const replacementMap = {
   "<CONTAINER_APPLICATION_PORT>": config.PORT,
   "<MYSQL_SERVICE_NAME>": config.DB.service_name,
   "<MYSQL_TABLE>": config.DB.usertable,
-  "<MYSQL_HEALTH_TABLE>": config.DB.health_table
+  "<MYSQL_HEALTH_TABLE>": config.DB.health_table,
+  "<SIGNALLING_SERVER_PORT>": config.SIGNALLING_PORT,
+  "<CONTAINER_SIGNALLING_SERVER_PORT>": config.SIGNALLING_PORT
 }
 
 function loadEnv() {

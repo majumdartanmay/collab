@@ -7,5 +7,4 @@ RUN npm install
 
 EXPOSE 3000
 
-CMD [ "echo" "Trying to print env $RUN_BAR" ]
 CMD [ "npm", "start"]

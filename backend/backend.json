@@ -1,5 +1,5 @@
 {
-    "PORT": 14555,
+    "PORT": 24555,
     "DB": {
         "usertable": "users",
         "service_name": "mysql_service",
@@ -7,10 +7,13 @@
         "user": "collab_user",
         "password": "Collab_11122023",
         "database": "collab",
-        "port": 11992,
+        "port": 21992,
         "connectTimeout": 60000,
         "root_password": "MySQLRootPassword",
         "health_table": "collab_health_table"
     },
-    "SALT_LENGTH": 7
+    "SALT_LENGTH": 7,
+    "SIGNALLING_PORT": 24444,
+    "SIGNALLING_SERVER": "localhost",
+    "BACKEND_SERVER": "localhost"
 }
