@@ -43,7 +43,7 @@ function replaceAndSaveFile(filePath, replacementMap, outputPath) {
         console.error('Error writing file:', err);
         return;
       }
-      console.log('File has been successfully modified and saved.');
+      console.log(`${filePath} has been saved to ${outputPath}`);
     });
   });
 }
