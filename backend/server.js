@@ -2,7 +2,7 @@
 
 const http = require('http');
 const ws = require('ws');
-const config = require('./config.json');
+const config = require('./backend.json');
 const wsReadyStateConnecting = 0
 const wsReadyStateOpen = 1
 const wsReadyStateClosing = 2 // eslint-disable-line
@@ -134,7 +134,7 @@ server.on('upgrade', (request, socket, head) => {
   wss.handleUpgrade(request, socket, head, handleAuth)
 })
 
-const hostname = config.SERVER_URL
+const hostname = config.SIGNALLING_SERVER
 server.listen(port, hostname)
 
 console.log('Signaling server running on ', hostname + ":" + port)
