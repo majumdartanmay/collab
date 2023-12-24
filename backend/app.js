@@ -4,7 +4,10 @@ const mysql = require('mysql2/promise');
 const app = express();
 const bcrypt = require('bcryptjs');
 
-const port = 15555
+const port = config.PORT;
+const database = config.DB.database;
+const tableName = config.DB.usertable;
+
 app.use(express.json());
 app.use(
     express.urlencoded({
@@ -17,13 +20,13 @@ app.get("/", (req, res) => {
 });
 
 app.get("/users", async function (req, res, next) {
-    const rows = await query("SELECT * FROM collab.users") || [];
+    const rows = await query(`SELECT * FROM ${database}.${tableName}`) || [];
     res.json(rows);
 });
 
 app.post("/user", async function (req, res, next) {
     try {
-        await preparedQuery('INSERT INTO collab.users (username, secret) VALUES (?, ?)',
+        await preparedQuery(`INSERT INTO ${database}.${tableName} (username, secret) VALUES (?, ?)`,
             [req.body.username, await bcrypt.hash(req.body.pwd, config.SALT_LENGTH)]);
         res.json({ "status": "OK" });
     } catch (err) {
@@ -51,11 +54,15 @@ app.post("/login", async function (req, res, next) {
 });
 
 app.listen(port, () => {
-    console.log(`DB backend app listening at http://localhost:${port}`);
+    console.log(`DB backend app listening at http://${config.BACKEND_SERVER}:${port}`);
 });
 
 async function query(sql, params) {
-    const connection = await mysql.createConnection(config.DB);
+    const connection = await mysql.createConnection({
+        host: config.DB.service_name,
+        user: config.DB.user,
+        password: config.DB.password
+    });
     const [results,] = await connection.execute(sql, params);
     connection.end();
     return results;
@@ -76,3 +83,9 @@ async function getSecret(user) {
     const pwd = results[0];
     return pwd;
 }
+
+app.get("/healthcheck", async function (req, res, next) {
+    const rows = await query(`SELECT * FROM ${config.DB.database}.${config.DB.health_table}`) || [];
+    res.json(rows);
+});
+

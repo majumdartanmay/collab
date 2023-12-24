@@ -1,0 +1,33 @@
+
+version: '3'
+
+services:
+  # MySQL service
+  mysql_service:
+    build:
+      context: .
+      dockerfile: Dockerfile.mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: MySQLRootPassword
+      MYSQL_DATABASE: collab
+      MYSQL_USER: collab_user
+      MYSQL_PASSWORD: Collab_11122023
+    ports:
+      - "21992:3306"
+
+  # Node.js application service
+  node-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - mysql_service
+    environment:
+      DB_HOST: mysql_service
+      DB_PORT: 21992
+      DB_USER: collab_user
+      DB_PASSWORD: Collab_11122023
+      DB_DATABASE: collab
+    ports:
+      - "24555:24555"
+      - "24444:24444"
