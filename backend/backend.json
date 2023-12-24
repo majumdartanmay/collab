@@ -1,11 +1,16 @@
 {
     "PORT": 14555,
     "DB": {
+        "usertable": "users",
+        "service_name": "mysql_service",
         "host": "localhost",
         "user": "collab_user",
         "password": "Collab_11122023",
         "database": "collab",
-        "connectTimeout": 60000
+        "port": 11992,
+        "connectTimeout": 60000,
+        "root_password": "MySQLRootPassword",
+        "health_table": "collab_health_table"
     },
     "SALT_LENGTH": 7
 }

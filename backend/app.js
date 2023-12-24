@@ -4,7 +4,7 @@ const mysql = require('mysql2/promise');
 const app = express();
 const bcrypt = require('bcryptjs');
 
-const port = 15555
+const port = config.PORT;
 app.use(express.json());
 app.use(
     express.urlencoded({

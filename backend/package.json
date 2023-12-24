@@ -1,19 +1,19 @@
 {
-  "name": "backend",
+  "name": "hello-world-node-app",
   "version": "1.0.0",
-  "description": "",
+  "description": "A simple Hello, World! Node.js application",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start_webrtc": "node server.js",
-    "start_backend": "node app.js"
+    "start": "node app.js"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "dependencies": {
     "bcryptjs": "^2.4.3",
+    "dockerode": "^4.0.1",
     "express": "^4.18.2",
-    "mysql2": "^3.6.3"
+    "gulp": "^4.0.2",
+    "mysql2": "^3.6.5"
+  },
+  "engines": {
+    "node": ">=14"
   }
 }
