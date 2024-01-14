@@ -15,7 +15,7 @@ import { roomExists, logDebug, addRoomMetadata , verifyRoomPwd } from './utils/W
 function App() {
 
   // hooks
-  let { hash } = useParams();
+  const { hash } = useParams();
   const [cookies, setCookie] = useCookies(["user"]);
   const [admin, setAdmin] = useState(false);
   const [authFailedErrorMsg, setAuthFailedErrorMsg] = useState('');
@@ -193,7 +193,6 @@ function App() {
     let randomNumber = Math.random() * maxVal;
     randomNumber = Math.floor(randomNumber);
     randomNumber = randomNumber.toString(16);
-    let randColor = randomNumber.padStart(6, 0);
     return colorHashCodes[randomNumber];
   }
 

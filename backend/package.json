@@ -1,10 +1,10 @@
 {
-  "name": "hello-world-node-app",
+  "name": "Collab_Backend",
   "version": "1.0.0",
   "description": "A simple Hello, World! Node.js application",
   "main": "app.js",
   "scripts": {
-    "backend": "node app.js",
+    "backend": "node --inspect=0.0.0.0:9229 app.js",
     "signal": "node server.js",
     "start": "npm-run-all --parallel backend signal"
   },

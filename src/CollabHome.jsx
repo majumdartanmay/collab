@@ -67,17 +67,17 @@ export default function CollabHome() {
         navigate(`/app/${roomId}`);
     };
 
-    const validateUserId = (event) => {
-        const currentUserId = event.target.value;
-        const userList = getYUsersInWebrtc();
-        const userExists = userList.indexOf(currentUserId) > -1;
-        setuserIdTVError(userExists);
-        if (userExists)
-            setuserIdTVErrorMsg(`${currentUserId} user already exists`);
-        else
-            setuserIdTVErrorMsg(null);
-
-    }
+    // const validateUserId = (event) => {
+    //     const currentUserId = event.target.value;
+    //     const userList = getYUsersInWebrtc();
+    //     const userExists = userList.indexOf(currentUserId) > -1;
+    //     setuserIdTVError(userExists);
+    //     if (userExists)
+    //         setuserIdTVErrorMsg(`${currentUserId} user already exists`);
+    //     else
+    //         setuserIdTVErrorMsg(null);
+    //
+    // }
 
     return (
         <ThemeProvider theme={defaultTheme}>
@@ -108,7 +108,6 @@ export default function CollabHome() {
                             autoFocus
                             error={userIdTVError}
                             helperText={userIdTVErrorMsg}
-                            onChange={validateUserId}
                         />
                         <TextField
                             margin="normal"
