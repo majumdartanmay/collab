@@ -13,7 +13,7 @@ GRANT SELECT, INSERT, UPDATE, DELETE ON collab.* TO 'collab_user'@'%';
 
 CREATE TABLE users (
     roomId VARCHAR(255) NOT NULL,
-    password VARCHAR(255) NOT NULL,
+    secret VARCHAR(255) NOT NULL,
     username VARCHAR(255) NOT NULL,
     PRIMARY KEY (roomId, username)
 );

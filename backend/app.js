@@ -54,24 +54,31 @@ app.post("/login", async function (req, res, next) {
 });
 
 async function query(sql, params) {
-    const connection = await mysql.createConnection({
-        host: config.DB.service_name,
-        user: config.DB.user,
-        password: config.DB.password
-    });
+    const connection = await createConnection();
     const [results,] = await connection.execute(sql, params);
     connection.end();
     return results;
 }
 
+async function createConnection() {
+
+    const connection = await mysql.createConnection({
+        host: config.DB.service_name,
+        user: config.DB.user,
+        password: config.DB.password
+    });
+
+    return connection;
+}
+
 async function preparedQuery(sql, params = []) {
-    const connection = await mysql.createConnection(config.DB);
+    const connection = await createConnection(); 
     await connection.query(sql, params);
     connection.end();
 }
 
 async function getSecret(user, roomId) {
-    const connection = await mysql.createConnection(config.DB);
+    const connection = await createConnection(); 
     const [results, ] = await connection.execute(`SELECT secret FROM ${database}.${tableName} WHERE username = ? and roomId  = ?`, [user, roomId]);
     if (!results) {
         return null;
@@ -80,7 +87,7 @@ async function getSecret(user, roomId) {
     return pwd;
 }
 
-app.get("/healthcheck", (req, res, next) => {
+app.get("/healthcheck", async(req, res, next) => {
     try {
         const rows = await query(`SELECT * FROM ${config.DB.database}.${config.DB.health_table}`) || [];
         res.json(rows);
