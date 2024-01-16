@@ -23,6 +23,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
-
 .vercel
+schema.sql
+docker-compose.yml
 
