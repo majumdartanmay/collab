@@ -26,4 +26,5 @@ dist-ssr
 .vercel
 schema.sql
 docker-compose.yml
+/coverage
 

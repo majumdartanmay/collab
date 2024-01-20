@@ -43,7 +43,6 @@ const userIdTVErrorMsgAtom = atom('');
 
 export default function CollabHome() {
     // hooks
-    const navigate = useNavigate();
     const [cookies, setCookie] = useCookies(["user"]);
     const [userIdTVError, setuserIdTVError] = useAtom(userIdTVErrorAtom);
     const [userIdTVErrorMsg, setuserIdTVErrorMsg] = useAtom(userIdTVErrorMsgAtom);
@@ -64,20 +63,18 @@ export default function CollabHome() {
             path: "/"
         });
         setUsername(username);
-        navigate(`/app/${roomId}`);
+        navigateToApp()
     };
-
-    // const validateUserId = (event) => {
-    //     const currentUserId = event.target.value;
-    //     const userList = getYUsersInWebrtc();
-    //     const userExists = userList.indexOf(currentUserId) > -1;
-    //     setuserIdTVError(userExists);
-    //     if (userExists)
-    //         setuserIdTVErrorMsg(`${currentUserId} user already exists`);
-    //     else
-    //         setuserIdTVErrorMsg(null);
-    //
-    // }
+    
+    function navigateToApp() {
+        try {
+            const navigate = useNavigate();
+            navigate(`/app/${roomId}`);
+        }
+        catch(e) {
+            console.warn("Unable to move to app environment. Ignore if we are in test environnment");
+        }
+    }
 
     return (
         <ThemeProvider theme={defaultTheme}>
@@ -103,6 +100,7 @@ export default function CollabHome() {
                             required
                             fullWidth
                             id="username"
+                            data-testid="username"
                             label="User name"
                             name="username"
                             autoFocus
@@ -117,6 +115,7 @@ export default function CollabHome() {
                             label="Room ID"
                             type="roomid"
                             id="roomid"
+                            data-testid="roomid"
                         />
                         <Button
                             type="submit"

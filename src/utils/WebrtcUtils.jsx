@@ -4,7 +4,7 @@ import config from '../../backend/config.json'
 
 const debug = true;
 
-const doc = new Y.Doc();
+const doc = createYDoc();
 const roomID = "4D278ds2f66729";
 const hostname = config.SERVER_URL;
 const port = config.SIGNALLING_PORT;
@@ -17,6 +17,10 @@ const roomYMap = doc.getMap(roomKey);
 
 export function logDebug(s) {
     if (debug) console.log(s);
+}
+
+function createYDoc() {
+    return new Y.Doc();
 }
 
 export function addYUsersInWebRtc(userName) {
