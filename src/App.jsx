@@ -4,7 +4,7 @@ import * as Y from "yjs";
 import { WebrtcProvider } from "y-webrtc"
 import { MonacoBinding } from 'y-monaco';
 import { useParams } from 'react-router-dom';
-import config from '../backend/config.json'
+import config from '../backend/backend.json'
 import { useCookies } from "react-cookie";
 import { useNavigate, /* other hooks */ } from 'react-router-dom';
 import './App.css';
@@ -16,7 +16,7 @@ function App() {
 
   // hooks
   const { hash } = useParams();
-  const [cookies, setCookie] = useCookies(["user"]);
+  const [cookies, _] = useCookies(["user"]);
   const [admin, setAdmin] = useState(false);
   const [authFailedErrorMsg, setAuthFailedErrorMsg] = useState('');
   const [promptOpened, setPromptOpened] = useState(false);
@@ -25,7 +25,7 @@ function App() {
   const navigate = useNavigate();
 
   // variables
-  const hostname = config.SERVER_URL;
+  const hostname = config.CLIENT.SIGNALLING_SERVER;
   const port = config.SIGNALLING_PORT;
   const userColorState = {}
 
@@ -123,7 +123,7 @@ function App() {
       name: userName
     });
 
-    awareness.on('update', changes => {
+    awareness.on('update', __ => {
       const docStates = Array.from(awareness.getStates().values());
       docStates.forEach(x => {
         const user = x['user'];
@@ -211,4 +211,4 @@ function App() {
   )
 }
 
-export default App
+export default App;

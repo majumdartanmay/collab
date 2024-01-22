@@ -1,14 +1,14 @@
 import { WebrtcProvider } from "y-webrtc"
 import * as Y from "yjs";
-import config from '../../backend/config.json'
+import config from '../../backend/backend.json'
 
 const debug = true;
 
 const doc = createYDoc();
 const roomID = "4D278ds2f66729";
-const hostname = config.SERVER_URL;
+const hostname = config.CLIENT.SIGNALLING_SERVER;
 const port = config.SIGNALLING_PORT;
-const provider = new WebrtcProvider(roomID, doc, { signaling: [`ws://${hostname}:${port}`] });
+new WebrtcProvider(roomID, doc, { signaling: [`ws://${hostname}:${port}`] });
 const userKey = 'users';
 const roomKey = 'rooms'
 const ymap = doc.getMap('metadata');
@@ -23,7 +23,11 @@ function createYDoc() {
     return new Y.Doc();
 }
 
-export function addYUsersInWebRtc(userName) {
+export const addUsers = (username) => {
+    addYUsersInWebRtc(username);
+}
+
+function addYUsersInWebRtc(userName) {
     updateYDoc();
     const usersY = ymap.get(userKey);
     const users = usersY.toArray();

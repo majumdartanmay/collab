@@ -9,15 +9,17 @@ import BorderColorIcon from '@mui/icons-material/BorderColor';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { useNavigate, /* other hooks */ } from 'react-router-dom';
 import { useCookies } from "react-cookie";
 import { atom, useAtom } from 'jotai';
 import { userNamePtyAtom } from './atoms/MetadataAtom'
-import { addYUsersInWebRtc, getYUsersInWebrtc } from './utils/WebrtcUtils'
+import { addUsers  } from './utils/WebrtcUtils'
+import { navigateHook  } from './utils/CollabHomeUtils'
 
 function Copyright(props) {
     return (
-        <Typography variant="body2" color="text.secondary" align="center" {...props}>
+        <Typography 
+            data-testid = "copyRightTestId"
+            variant="body2" color="text.secondary" align="center" {...props}>
             {'Copyright © '}
             <Link color="inherit" href="https://mui.com/">
                 collab.com
@@ -28,12 +30,6 @@ function Copyright(props) {
     );
 }
 
-// const defaultTheme = createTheme({
-//     palette: {
-//         mode: 'dark',
-//     },
-// });
-
 const defaultTheme = createTheme({
 
 });
@@ -43,11 +39,11 @@ const userIdTVErrorMsgAtom = atom('');
 
 export default function CollabHome() {
     // hooks
-    const [cookies, setCookie] = useCookies(["user"]);
-    const [userIdTVError, setuserIdTVError] = useAtom(userIdTVErrorAtom);
-    const [userIdTVErrorMsg, setuserIdTVErrorMsg] = useAtom(userIdTVErrorMsgAtom);
-    const [username, setUsername] = useAtom(userNamePtyAtom);
-
+    const [, setCookie] = useCookies(["user"]);
+    const [userIdTVError, ] = useAtom(userIdTVErrorAtom);
+    const [userIdTVErrorMsg, ] = useAtom(userIdTVErrorMsgAtom);
+    const [, setUsername] = useAtom(userNamePtyAtom);
+    const navigate = navigateHook(); 
     // variables
     const handleSubmit = (event) => {
 
@@ -56,23 +52,23 @@ export default function CollabHome() {
         if (userIdTVError) return;
 
         const data = new FormData(event.currentTarget);
-        const roomId = data.get('roomid');
         const username = data.get('username');
-        addYUsersInWebRtc(username);
+        const roomId = data.get('roomid');
+        addUsers(username);
         setCookie("username", username, {
             path: "/"
         });
         setUsername(username);
-        navigateToApp()
+        navigateToApp(roomId)
     };
     
-    function navigateToApp() {
+    function navigateToApp(roomId) {
         try {
-            const navigate = useNavigate();
             navigate(`/app/${roomId}`);
         }
         catch(e) {
             console.warn("Unable to move to app environment. Ignore if we are in test environnment");
+            console.error(e);
         }
     }
 
@@ -118,6 +114,7 @@ export default function CollabHome() {
                             data-testid="roomid"
                         />
                         <Button
+                            data-testid = "submit"
                             type="submit"
                             fullWidth
                             variant="outlined"

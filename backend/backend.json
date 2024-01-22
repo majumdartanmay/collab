@@ -15,5 +15,8 @@
     "SALT_LENGTH": 7,
     "SIGNALLING_PORT": 24444,
     "SIGNALLING_SERVER": "0.0.0.0",
-    "BACKEND_SERVER": "0.0.0.0"
+    "BACKEND_SERVER": "0.0.0.0", 
+    "CLIENT": {
+        "SIGNALLING_SERVER": "localhost"
+    }
 }
