@@ -16,3 +16,4 @@ Test file is called `AppTest.jsx`
 1. User should see `CollabPrompt` component when this component starts
 2. Try to enter the needed values and see if the component is gone
 3. Write some text in the monaco editor and see if it reflects
+4. Navigate to home page if username is not found in cookies

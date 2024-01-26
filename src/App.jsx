@@ -1,12 +1,13 @@
 import Editor from "@monaco-editor/react"
+import { navigateHook } from './utils/HookUtils'
 import * as Y from "yjs";
 import {createMonacoProvider, createWebrtcProvider} from './utils/DependencyUtils'
 import config from '../backend/backend.json'
 import './App.css';
 import CollabPrompt from './utils/CollabPrompt';
 import { roomExists, logDebug, addRoomMetadata , verifyRoomPwd } from './utils/WebrtcUtils'
-import {paramsHook, navigateHook, refHook, stateHook, cookiesHook } from './utils/HookUtils'
-
+import {paramsHook, refHook, stateHook, cookiesHook } from './utils/HookUtils'
+import {doHandleEditorMount} from './utils/AppUtils.jsx'
 
 function App() {
 
@@ -16,9 +17,16 @@ function App() {
   const [admin, setAdmin] = stateHook(false);
   const [authFailedErrorMsg, setAuthFailedErrorMsg] = stateHook('');
   const [promptOpened, setPromptOpened] = stateHook(false);
+  const navigate = navigateHook(); 
   const editorRef = refHook(null);
   const userNameRef = refHook(null);
-  const navigate = navigateHook();
+  const componentController = {
+    setAdmin,
+    setPromptOpened, 
+    callback : () => {
+      handleUserAuth(hash);
+    }
+  }
 
   // variables
   const hostname = config.CLIENT.SIGNALLING_SERVER;
@@ -141,16 +149,8 @@ function App() {
     setPromptOpened(true);
   }
 
-  function handleEditorDidMount(editor, monaco) {
-
-    const userName = cookies.username;
-    if (!userName) {
-      navigate("/");
-      return;
-    }
-    editorRef.current = editor;
-    userNameRef.current = userName;
-    handleUserAuth(hash);
+  function handleEditorDidMount(editor, _) {
+    doHandleEditorMount(cookies, editorRef, userNameRef, editor,componentController, navigate);
   }
 
   function provisionMonacoEditor() {
@@ -196,8 +196,9 @@ function App() {
   return (
     <div id="app-container">
       <CollabPrompt data={admin ? createPasswordProps : requirePasswordProps} room={hash} open={promptOpened} error = {authFailedErrorMsg}/>
-      <div id="editor-container">
+      <div id="editor-container" data-testid="editor-container">
         <Editor
+          data-testid = "monaco-editor-collab"
           height="100vh"
           width="100vw"
           onMount={handleEditorDidMount}
