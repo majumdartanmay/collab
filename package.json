@@ -49,6 +49,7 @@
     "web-vitals": "^2.1.4"
   },
   "jest": {
+    "testMatch": ["**/__tests__/**/*Test.[jt]s?(x)", "**/?(*.)+(spec|test).[jt]s?(x)"],
     "transformIgnorePatterns": [
       "/node_modules/(?!(yjs|lib0|y-webrtc|y-protocols|y-monaco|monaco-editor)).+\\.js$"
     ],
