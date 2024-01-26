@@ -12,3 +12,12 @@ export function createMonacoProvider(type, editorModel, editorSet, awareness) {
       editorSet,
       awareness);
 }
+
+/**
+ *
+ *
+ *    "moduleNameMapper": {
+      "monaco-editor": "<rootDir>/node_modules/monaco-editor"
+    }
+
+ * */

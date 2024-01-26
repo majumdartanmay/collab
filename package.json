@@ -50,10 +50,13 @@
   },
   "jest": {
     "transformIgnorePatterns": [
-      "/node_modules/(?!(yjs|lib0|y-webrtc|y-protocols|y-monaco)).+\\.js$"
+      "/node_modules/(?!(yjs|lib0|y-webrtc|y-protocols|y-monaco|monaco-editor)).+\\.js$"
     ],
     "transform": {
       "^.+\\.jsx?$": "babel-jest"
+    }, 
+    "moduleNameMapper": {
+      "^monaco-editor$": "<rootDir>/node_modules/@monaco-editor/react"
     }
   }
 }
