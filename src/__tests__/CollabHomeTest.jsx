@@ -1,6 +1,6 @@
 import { render, screen, fireEvent } from '@testing-library/react'
 import * as utils from '../utils/WebrtcUtils'
-import * as collabUtils from '../utils/CollabHomeUtils'
+import * as collabUtils from '../utils/HookUtils'
 import userEvent from '@testing-library/user-event'
 import CollabHome from '../CollabHome';
 

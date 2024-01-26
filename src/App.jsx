@@ -1,28 +1,25 @@
-import { useRef, useState } from 'react'
 import Editor from "@monaco-editor/react"
 import * as Y from "yjs";
 import { WebrtcProvider } from "y-webrtc"
 import { MonacoBinding } from 'y-monaco';
-import { useParams } from 'react-router-dom';
 import config from '../backend/backend.json'
-import { useCookies } from "react-cookie";
-import { useNavigate, /* other hooks */ } from 'react-router-dom';
 import './App.css';
 import CollabPrompt from './utils/CollabPrompt';
 import { roomExists, logDebug, addRoomMetadata , verifyRoomPwd } from './utils/WebrtcUtils'
+import {paramsHook, navigateHook, refHook, stateHook, cookiesHook } from './utils/HookUtils'
 
 
 function App() {
 
   // hooks
-  const { hash } = useParams();
-  const [cookies, _] = useCookies(["user"]);
-  const [admin, setAdmin] = useState(false);
-  const [authFailedErrorMsg, setAuthFailedErrorMsg] = useState('');
-  const [promptOpened, setPromptOpened] = useState(false);
-  const editorRef = useRef(null);
-  const userNameRef = useRef(null);
-  const navigate = useNavigate();
+  const { hash } = paramsHook();
+  const [cookies, _] = cookiesHook(["user"]);
+  const [admin, setAdmin] = stateHook(false);
+  const [authFailedErrorMsg, setAuthFailedErrorMsg] = stateHook('');
+  const [promptOpened, setPromptOpened] = stateHook(false);
+  const editorRef = refHook(null);
+  const userNameRef = refHook(null);
+  const navigate = navigateHook();
 
   // variables
   const hostname = config.CLIENT.SIGNALLING_SERVER;

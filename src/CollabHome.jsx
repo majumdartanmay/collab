@@ -9,11 +9,9 @@ import BorderColorIcon from '@mui/icons-material/BorderColor';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { useCookies } from "react-cookie";
-import { atom, useAtom } from 'jotai';
 import { userNamePtyAtom } from './atoms/MetadataAtom'
 import { addUsers  } from './utils/WebrtcUtils'
-import { navigateHook  } from './utils/CollabHomeUtils'
+import { navigateHook, cookiesHook, atomHook, createAtomInstance } from './utils/HookUtils'
 
 function Copyright(props) {
     return (
@@ -34,15 +32,15 @@ const defaultTheme = createTheme({
 
 });
 
-const userIdTVErrorAtom = atom(false);
-const userIdTVErrorMsgAtom = atom('');
+const userIdTVErrorAtom = createAtomInstance(false);
+const userIdTVErrorMsgAtom = createAtomInstance('');
 
 export default function CollabHome() {
     // hooks
-    const [, setCookie] = useCookies(["user"]);
-    const [userIdTVError, ] = useAtom(userIdTVErrorAtom);
-    const [userIdTVErrorMsg, ] = useAtom(userIdTVErrorMsgAtom);
-    const [, setUsername] = useAtom(userNamePtyAtom);
+    const [, setCookie] = cookiesHook(["user"]);
+    const [userIdTVError, ] = atomHook(userIdTVErrorAtom);
+    const [userIdTVErrorMsg, ] = atomHook(userIdTVErrorMsgAtom);
+    const [, setUsername] = atomHook(userNamePtyAtom);
     const navigate = navigateHook(); 
     // variables
     const handleSubmit = (event) => {
