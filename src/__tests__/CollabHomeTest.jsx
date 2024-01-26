@@ -1,7 +1,7 @@
 import { render, screen, fireEvent } from '@testing-library/react'
 import * as utils from '../utils/WebrtcUtils'
-import * as collabUtils from '../utils/HookUtils'
 import userEvent from '@testing-library/user-event'
+import {navigationMocker} from './TestUtils'
 import CollabHome from '../CollabHome';
 
 test("CollabHome Dom element testing", () => {
@@ -79,17 +79,4 @@ test('Handle submit behaviour', async () => {
     expect(useNavigateMock).toHaveBeenCalled();
 
 });
-
-function navigationMocker(testNavigationValue) {
-
-    const navigateMock = jest.spyOn(collabUtils, 'navigateHook');
-    navigateMock.mockImplementation(() => {
-        return (navigationPath) => {
-            if (testNavigationValue)
-                expect(navigationPath).toBe(testNavigationValue);
-        }
-    });
-
-    return navigateMock;
-}
 

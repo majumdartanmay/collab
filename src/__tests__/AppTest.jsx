@@ -1,6 +1,5 @@
 import { render, screen, fireEvent } from '@testing-library/react'
 import App from '../App';
-import * as collabUtils from '../utils/HookUtils'
 import {navigationMocker} from './TestUtils'
 
 beforeAll(() => {
