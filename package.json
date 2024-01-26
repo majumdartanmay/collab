@@ -50,7 +50,7 @@
   },
   "jest": {
     "transformIgnorePatterns": [
-      "/node_modules/(?!(yjs|lib0|y-webrtc|y-protocols)).+\\.js$"
+      "/node_modules/(?!(yjs|lib0|y-webrtc|y-protocols|y-monaco)).+\\.js$"
     ],
     "transform": {
       "^.+\\.jsx?$": "babel-jest"

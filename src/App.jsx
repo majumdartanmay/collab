@@ -1,7 +1,6 @@
 import Editor from "@monaco-editor/react"
 import * as Y from "yjs";
-import { WebrtcProvider } from "y-webrtc"
-import { MonacoBinding } from 'y-monaco';
+import {createMonacoProvider, createWebrtcProvider} from './utils/DependencyUtils'
 import config from '../backend/backend.json'
 import './App.css';
 import CollabPrompt from './utils/CollabPrompt';
@@ -158,11 +157,11 @@ function App() {
     const userName = userNameRef.current;
     const currentColorCode = generateRandomColor()
     const doc = new Y.Doc();
-    const provider = new WebrtcProvider(hash, doc, { signaling: [`ws://${hostname}:${port}`] });
+    const provider = createWebrtcProvider()(hash, doc, { signaling: [`ws://${hostname}:${port}`] });
     const type = doc.getText("monaco");
     const awareness = provider.awareness
 
-    new MonacoBinding(
+    createMonacoProvider(
       type,
       editorRef.current.getModel(),
       new Set([editorRef.current]),

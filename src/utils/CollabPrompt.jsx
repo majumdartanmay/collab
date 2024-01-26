@@ -6,11 +6,11 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import { useNavigate, /* other hooks */ } from 'react-router-dom';
+import { navigateHook,  } from './HookUtils'
 
 export default function CollabPrompt(props) {
 
-  const navigate = useNavigate();
+  const navigate = navigateHook();
 
   function handleSumbit(event) {
     event.preventDefault();
@@ -28,7 +28,7 @@ export default function CollabPrompt(props) {
 
   return (
     <div>
-      <div id="collab-prompt">
+      <div id="collab-prompt" data-testid = "collab-prompt">
         <Dialog open = {props.open}>
           <DialogTitle>Alert</DialogTitle>
           <DialogContent>

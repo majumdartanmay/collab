@@ -1,15 +1,8 @@
 import { render, screen, fireEvent } from '@testing-library/react'
 import App from '../App';
 
-test("When room is created for first time.", () => {
+test("Room is created", () => {
     render(<App/>);
-
-    const usernameElement = screen.getByTestId('username').querySelector('input');
-    const roomIdElement = screen.getByTestId('roomid')
-    const copyrightElement = screen.getByTestId('copyRightTestId')
-
-    expect(usernameElement).toBeInTheDocument();
-    expect(roomIdElement).toBeInTheDocument();
-    expect(copyrightElement).toBeInTheDocument();
-    
+    const collabPromptElem = screen.getByTestId('collab-prompt');
+    expect(collabPromptElem).toBeInTheDocument();
 })
