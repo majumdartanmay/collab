@@ -4,7 +4,6 @@ export function getUsernameFromCookie(cookie) {
 
 export function doHandleEditorMount(cookies, editorRef, userNameRef, editor, componentControllers, navigate) {
   const userName = getUsernameFromCookie(cookies);
-  console.log("username@"+userName);
   if (!userName) {
     navigate("/");
     return;

@@ -1,8 +1,7 @@
 import { render, screen,  } from '@testing-library/react'
 import App from '../App';
-import * as hookUtils from '../utils/HookUtils'
-import {navigationMocker } from './TestUtils'
-import * as appUtils from '../utils/AppUtils'
+import { navigationMocker } from './TestUtils'
+import * as appUtils from '../utils/appUtils'
 
 beforeAll(() => {
     navigationMocker();
@@ -21,15 +20,29 @@ test("Room is created", async () => {
 
 })
 
-test("Check mount behavior when valid username is passed" , async () => {
-    const username = 'Ceaser';
-    const authCallback = jest.fn();
+test("check mount behavior when valid username is passed" , async () => {
+    const username = 'ceaser';
+    const authcallback = jest.fn();
     appUtils.doHandleEditorMount({username}, {}, {}, {}, {
-        setAdmin: jest.fn(),
-        setPromptOpened: jest.fn(),
-        callback: authCallback
+        setadmin: jest.fn(),
+        setpromptopened: jest.fn(),
+        callback: authcallback
     }, jest.fn());
 
-    expect(authCallback).toHaveBeenCalled();
+    expect(authcallback).toHaveBeenCalled();
+})
+
+test("check mount behavior when there is no username" , async () => {
+    const username = '';
+    const authcallback = jest.fn();
+    const navigate = jest.fn();
+    appUtils.doHandleEditorMount({username}, {}, {}, {}, {
+        setadmin: jest.fn(),
+        setpromptopened: jest.fn(),
+        callback: authcallback
+    }, navigate);
+
+    expect(authcallback).toHaveBeenCalledTimes(0);
+    expect(navigate).toHaveBeenCalledTimes(1);
 })
 

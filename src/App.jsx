@@ -144,7 +144,6 @@ function App() {
 
   function handleUserAuth(roomName) {
     const exists = roomExists(roomName);
-    logDebug("Exists @ " + exists);
     setAdmin(!exists);
     setPromptOpened(true);
   }

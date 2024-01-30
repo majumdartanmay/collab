@@ -31,7 +31,6 @@ function addYUsersInWebRtc(userName) {
     updateYDoc();
     const usersY = ymap.get(userKey);
     const users = usersY.toArray();
-    console.log("users @ " + users);
     users.push(userName);
     usersY.insert(0, users);
 }

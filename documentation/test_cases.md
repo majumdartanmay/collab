@@ -13,7 +13,6 @@ Test file is called `CollabHomeTest.jsx`
 
 Test file is called `AppTest.jsx`
 
-1. User should see `CollabPrompt` component when this component starts
-2. Try to enter the needed values and see if the component is gone
-3. Write some text in the monaco editor and see if it reflects
-4. Navigate to home page if username is not found in cookies
+1. Check is some essential components are present when app.jsx is rendered
+2. Check if auth is attempted with username is found
+3. User should be redirected if there are no username present in cookies.
