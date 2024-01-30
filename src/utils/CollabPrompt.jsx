@@ -28,7 +28,7 @@ export default function CollabPrompt(props) {
 
   return (
     <div>
-      <div id="collab-prompt" data-testid = "collab-prompt">
+      <div data-testid = "collab-prompt-container" id="collab-prompt">
         <Dialog open = {props.open}>
           <DialogTitle>Alert</DialogTitle>
           <DialogContent>
@@ -39,6 +39,7 @@ export default function CollabPrompt(props) {
               autoFocus
               margin="dense"
               id="roomPwd"
+              data-testid="roomPwd"
               label="Password"
               type="password"
               fullWidth
@@ -48,8 +49,8 @@ export default function CollabPrompt(props) {
             />
           </DialogContent>
           <DialogActions>
-            <Button onClick={handleCancel}>Cancel</Button>
-            <Button onClick={handleSumbit}>OK</Button>
+            <Button data-testid = "collab-prompt-cancel" id = "collab-prompt-cancel" onClick={handleCancel}>Cancel</Button>
+            <Button data-testid = "collab-prompt-ok" id = "collab-prompt-ok" onClick={handleSumbit}>OK</Button>
           </DialogActions>
         </Dialog>
       </div>

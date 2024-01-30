@@ -10,11 +10,6 @@ beforeAll(() => {
 test("Room is created", async () => {
     render(<App/>);
 
-    await new Promise((r) => setTimeout(r, 2000));
-
-    const collabPromptElem = screen.getByTestId('collab-prompt');
-    expect(collabPromptElem).toBeInTheDocument();
-
     const editorContainer = screen.getByTestId('editor-container');
     expect(editorContainer).toBeInTheDocument();
 

@@ -22,9 +22,8 @@ test('Test collab home change value', () => {
     render(<CollabHome />);
 
     const testValue = 'testValue';
-
-    const usernameElement = screen.getByTestId('username').querySelector('input');
     const roomIdElement = screen.getByTestId('roomid').querySelector('input');
+    const usernameElement = screen.getByTestId('username').querySelector('input');
     
     fireEvent.change(usernameElement, {
       target: {
