@@ -59,6 +59,11 @@ function App() {
   }
 
   function addPasswordToRoom(pwd, room) {
+
+    if (!validateRoomState(pwd, room, setAuthFailedErrorMsg)) {
+      return;
+    }
+
     addRoomMetadata(room, pwd);
     setPromptOpened(false);
     provisionMonacoEditor();
