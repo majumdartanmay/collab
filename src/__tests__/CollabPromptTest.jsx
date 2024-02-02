@@ -79,15 +79,3 @@ test("Is cancel being called correctly", async () => {
     expect(processPwd).toHaveBeenCalledTimes(0);
     expect(useNavigateMock).toHaveBeenCalled();
 });
-
-test("Handle empty entry", async () => {
-    const processPwd = jest.fn();
-    const createPasswordProps = {
-        prompt: "test",
-        processPwd,
-    }
-    const open = true;
-    render(<CollabPrompt data = {createPasswordProps} open = {open} />);
-    await userEvent.click(screen.getByTestId('collab-prompt-ok'));
-    expect(processPwd).toHaveBeenCalledTimes(0);
-});

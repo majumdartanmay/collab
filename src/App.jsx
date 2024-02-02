@@ -5,9 +5,9 @@ import {createMonacoProvider, createWebrtcProvider} from './utils/DependencyUtil
 import config from '../backend/backend.json'
 import './App.css';
 import CollabPrompt from './utils/CollabPrompt';
-import { roomExists, logDebug, addRoomMetadata , verifyRoomPwd } from './utils/WebrtcUtils'
+import { roomExists,  addRoomMetadata , verifyRoomPwd } from './utils/WebrtcUtils'
 import {paramsHook, refHook, stateHook, cookiesHook } from './utils/HookUtils'
-import {doHandleEditorMount} from './utils/AppUtils.jsx'
+import {validateRoomState, doHandleEditorMount} from './utils/AppUtils.jsx'
 
 function App() {
 
@@ -45,6 +45,11 @@ function App() {
   }
 
   function verifyPwd(pwd, room) {
+
+    if (!validateRoomState(pwd, room, setAuthFailedErrorMsg)) {
+      return;
+    }
+
     if (verifyRoomPwd(room, pwd)) {
       setPromptOpened(false);
       provisionMonacoEditor();

@@ -1,7 +1,7 @@
 import { render, screen,  } from '@testing-library/react'
 import App from '../App';
 import { navigationMocker } from './TestUtils'
-import * as appUtils from '../utils/appUtils'
+import * as appUtils from '../utils/AppUtils'
 
 beforeAll(() => {
     navigationMocker();
@@ -41,3 +41,24 @@ test("check mount behavior when there is no username" , async () => {
     expect(navigate).toHaveBeenCalledTimes(1);
 })
 
+test("Test Room state validation when password is null and room is null", () => {
+    const errorHandler = jest.fn();
+    appUtils.validateRoomState('', '', errorHandler);
+    expect(errorHandler).toBeCalledTimes(1);
+});
+
+test("Test Room state validation when password is not null and room is null", () => {
+    const errorHandler = jest.fn();
+    const roomId = "";
+    const pwd = "pwdTest";
+    appUtils.validateRoomState(pwd, roomId, errorHandler);
+    expect(errorHandler).toBeCalledTimes(1);
+});
+
+test("Test Room state validation when password is not null and room is not null", () => {
+    const errorHandler = jest.fn();
+    const roomId = "roomId";
+    const pwd = "pwdTest";
+    appUtils.validateRoomState(pwd, roomId, errorHandler);
+    expect(errorHandler).toBeCalledTimes(0);
+});
