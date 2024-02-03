@@ -3,7 +3,6 @@ import * as Y from "yjs";
 import config from '../../backend/backend.json'
 
 const debug = true;
-
 const doc = createYDoc();
 const roomID = "4D278ds2f66729";
 const hostname = config.CLIENT.SIGNALLING_SERVER;
