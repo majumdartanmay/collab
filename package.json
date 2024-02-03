@@ -9,8 +9,8 @@
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview --port 10302 --host",
     "backend": "cd backend && node server.js",
-    "test_watch": "react-scripts test --watchAll --coverage --detectOpenHandles"
-    "test": "react-scripts test --coverage --detectOpenHandles"
+    "test_watch": "react-scripts test --watchAll --coverage --detectOpenHandles",
+    "test": "react-scripts test --watchAll=false --coverage --detectOpenHandles"
   },
   "dependencies": {
     "@emotion/react": "^11.11.1",
