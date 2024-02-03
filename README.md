@@ -37,3 +37,11 @@ If after compilation you want to run on production mode in local. Then run the f
 npm run build
 npm run preview
 ```
+
+## Run unit tests
+
+Unit tests have been created using [jest](https://jestjs.io/docs/tutorial-react)
+
+```
+npm run test
+```
