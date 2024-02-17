@@ -32,7 +32,9 @@ function App() {
   const hostname = config.CLIENT.SIGNALLING_SERVER;
   const port = config.SIGNALLING_PORT;
   const userColorState = {}
-
+  
+  /**
+   * */
   const requirePasswordProps = {
     prompt: "Please enter the password",
     processPwd: verifyPwd
@@ -64,7 +66,7 @@ function App() {
       return;
     }
 
-    addRoomMetadata(room, pwd);
+    addRoomMetadata(room, pwd, userNameRef.current);
     setPromptOpened(false);
     provisionMonacoEditor();
   }
@@ -157,11 +159,19 @@ function App() {
     setAdmin(!exists);
     setPromptOpened(true);
   }
-
+  
+  /*
+   * @param {MonacoEditor} editor
+   *
+   * */
   function handleEditorDidMount(editor, _) {
     doHandleEditorMount(cookies, editorRef, userNameRef, editor,componentController, navigate);
   }
 
+  /**
+   * Method to enter the data in the editor. 
+   * 
+   * */
   function provisionMonacoEditor() {
     const userName = userNameRef.current;
     const currentColorCode = generateRandomColor()
@@ -179,6 +189,12 @@ function App() {
     notifyUserPresence(doc.clientID, currentColorCode, awareness, userName);
   }
 
+  /**
+   *
+   * Each user has a color associated with them. 
+   * This is how that color is randomly genereated
+   *
+   * */
   function generateRandomColor() {
     const colorHashCodes = [
       "#FF5733",

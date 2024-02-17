@@ -39,8 +39,28 @@ function updateYDoc() {
     Y.applyUpdate(doc, update);
 }
 
-export function addRoomMetadata(room, pwd)  {
+export function addRoomMetadata(room, pwd, admin)  {
+
     roomYMap.set(room, pwd);
+    const reqBody = {
+        username: admin,
+        pwd,
+        roomId: room
+    }
+    var data = JSON.stringify(reqBody);
+
+    var xhr = new XMLHttpRequest();
+
+    xhr.addEventListener("readystatechange", function() {
+        if(this.readyState === 4) {
+            console.log(this.responseText);
+        }
+    });
+
+    xhr.open("POST", "http://localhost:24555/room");
+    xhr.setRequestHeader("Content-Type", "application/json");
+
+    xhr.send(data);
 }
 
 export function roomExists(room) {
@@ -51,6 +71,25 @@ export function roomExists(room) {
 }
 
 export function verifyRoomPwd(room, pwd) {
+
+    var data = JSON.stringify({
+        pwd,
+        roomId: room
+    });
+
+    var xhr = new XMLHttpRequest();
+
+    xhr.addEventListener("readystatechange", function() {
+        if(this.readyState === XMLHttpRequest.DONE) {
+            const statusBody = JSON.parse(this.responseText);
+            console.log(statusBody);
+        }
+    });
+
+    xhr.open("POST", "http://localhost:24555/login");
+    xhr.setRequestHeader("Content-Type", "application/json");
+
+    xhr.send(data);
     return roomYMap.get(room) === pwd;
 }
 

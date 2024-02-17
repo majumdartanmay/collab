@@ -1,4 +1,5 @@
 const config = require('./backend.json');
+var cors = require('cors')
 const express = require("express");
 const mysql = require('mysql2/promise');
 const app = express();
@@ -9,22 +10,25 @@ const database = config.DB.database;
 const tableName = config.DB.usertable;
 
 app.use(express.json());
+
+//Enable cors
+app.use(cors({
+    origin: 'http://localhost:10302'
+}));
+
+app.use(function (req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+});
+
 app.use(
     express.urlencoded({
         extended: true,
     })
 );
 
-app.get("/", (req, res) => {
-    res.json({ message: "ok" });
-});
-
-app.get("/users", async function (req, res, next) {
-    const rows = await query(`SELECT * FROM ${database}.${tableName}`) || [];
-    res.json(rows);
-});
-
-app.post("/user", async function (req, res, next) {
+app.post("/room", async function (req, res, next) {
     try {
         await preparedQuery(`INSERT INTO ${database}.${tableName} (username, secret, roomId) VALUES (?, ?, ?)`,
             [req.body.username, await bcrypt.hash(req.body.pwd, config.SALT_LENGTH), req.body.roomId]);
@@ -36,7 +40,7 @@ app.post("/user", async function (req, res, next) {
 
 app.post("/login", async function (req, res, next) {
     try {
-        const pwd = await getSecret(req.body.username, req.body,roomId);
+        const pwd = await getSecret(req.body.roomId);
         if (!pwd) {
             res.json({status: "NOT_FOUND", message: "User not found"});
             return;
@@ -77,9 +81,9 @@ async function preparedQuery(sql, params = []) {
     connection.end();
 }
 
-async function getSecret(user, roomId) {
+async function getSecret(roomId) {
     const connection = await createConnection(); 
-    const [results, ] = await connection.execute(`SELECT secret FROM ${database}.${tableName} WHERE username = ? and roomId  = ?`, [user, roomId]);
+    const [results, ] = await connection.execute(`SELECT secret FROM ${database}.${tableName} WHERE roomId  = ?`,  [roomId]);
     if (!results) {
         return null;
     }
