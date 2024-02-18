@@ -2,7 +2,6 @@ import * as Y from "yjs";
 import config from '../../backend/backend.json'
 import {createWebrtcProvider} from './DependencyUtils'
 
-const debug = true;
 const doc = createYDoc();
 const SUCCESS = 0;
 const FAIL = 1;
@@ -27,7 +26,7 @@ function initContext() {
 }
 
 export function logDebug(s) {
-    if (debug) console.log(s);
+    if (localStorage.collab) console.log(s);
 }
 
 function createYDoc() {
@@ -106,13 +105,13 @@ export function verifyRoomPwd(roomId, pwd, callback) {
     xhr.addEventListener("readystatechange", function() {
         if(this.readyState === XMLHttpRequest.DONE) {
 
-            logDebug(this.responseText);
             const statusBody = JSON.parse(this.responseText);
+            logDebug(statusBody);
 
             if (statusBody && statusBody.status == "OK") {
-                callback(SUCCESS, status.message);
+                callback(SUCCESS, statusBody.message);
             }else if (statusBody) {
-                callback(FAIL, status.message);
+                callback(FAIL, statusBody.message);
             }else {
                 callback(UNKNOWN_ERROR, "Unable to verify your credentials. Please try again");
             }

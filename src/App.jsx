@@ -57,6 +57,7 @@ function App() {
 
     setLoading(true);
     verifyRoomPwd(room, pwd, (success, msg) => {
+      logDebug(`VerifyRoomPwd : ${msg}`);
       setLoading(false);
       if (success == 0 ) { // auth was success
         setPromptOpened(false);
