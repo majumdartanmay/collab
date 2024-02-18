@@ -1,8 +1,8 @@
-#!/usr/bin/env node
+import config from './backend.json' assert { type: "json" };
+import { WebSocketServer } from 'ws'
+import http from 'http'
+import * as map from 'lib0/map'
 
-const http = require('http');
-const ws = require('ws');
-const config = require('./backend.json');
 const wsReadyStateConnecting = 0
 const wsReadyStateOpen = 1
 const wsReadyStateClosing = 2 // eslint-disable-line
@@ -11,8 +11,7 @@ const wsReadyStateClosed = 3 // eslint-disable-line
 const pingTimeout = 30000
 
 const port = config.SIGNALLING_PORT
-// @ts-ignore
-const wss = new ws.Server({ noServer: true })
+const wss = new WebSocketServer({ noServer: true })
 
 const server = http.createServer((request, response) => {
   response.writeHead(200, { 'Content-Type': 'text/plain' })
@@ -80,7 +79,7 @@ const onconnection = conn => {
     closed = true
   })
   conn.on('message', /** @param {object} message */ message => {
-    if (typeof message === 'string') {
+    if (typeof message === 'string' || message instanceof Buffer) {
       message = JSON.parse(message)
     }
     if (message && message.type && !closed) {
@@ -134,7 +133,7 @@ server.on('upgrade', (request, socket, head) => {
   wss.handleUpgrade(request, socket, head, handleAuth)
 })
 
-const hostname = config.SIGNALLING_SERVER
+const hostname = config.SIGNALLING_SERVER;
 server.listen(port, hostname)
 
-console.log('Signaling server running on ', hostname + ":" + port)
+console.log(`Signalling server running on ${hostname}:${port}`, port)

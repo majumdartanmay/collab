@@ -4,7 +4,7 @@
         {
             "type": "node",
             "request": "attach",
-            "name": "Attach to remote instance",
+            "name": "Application Server remote instance",
             "port": 9229,
             "trace": true,
             "localRoot": "${workspaceRoot}\\backend",
@@ -13,12 +13,36 @@
         {
             "type": "pwa-node",
             "request": "attach",
-            "name": "Attach to remote instance",
+            "name": "Application Server remote instance",
             "port": 9229,
             "trace": true,
             "localRoot": "${workspaceFolder}\\backend",
             "remoteRoot": "/opt/app"
+        },
+        {
+            "type": "node",
+            "request": "attach",
+            "name": "Signalling Server remote instance",
+            "port": 9230,
+            "trace": true,
+            "localRoot": "${workspaceRoot}\\backend",
+            "remoteRoot": "/opt/app"
+        },
+        {
+            "type": "pwa-node",
+            "request": "attach",
+            "name": "Signalling Server remote instance",
+            "port": 9230,
+            "trace": true,
+            "localRoot": "${workspaceFolder}\\backend",
+            "remoteRoot": "/opt/app"
         }
-
-    ]
+    ], 
+    "compounds": [
+        {
+          "name": "Server/Client",
+          "configurations": ["Application Server remote instance", "Signalling Server remote instance"],
+          "stopAll": true
+        }
+      ]
 }

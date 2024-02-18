@@ -2,7 +2,7 @@ import * as Y from "yjs";
 import config from '../../backend/backend.json'
 import {createWebrtcProvider} from './DependencyUtils'
 
-const debug = false;
+const debug = true;
 const doc = createYDoc();
 const SUCCESS = 0;
 const FAIL = 1;
@@ -14,12 +14,17 @@ const backend_host = config.CLIENT.BACKEND_SERVER;
 const backend_port = config.PORT;
 const backend_scheme = config.BACKEND_URL_SCHEME;
 const backend_url = `${backend_scheme}://${backend_host}:${backend_port}/`
-createWebrtcProvider(roomID, doc, { signaling: [`ws://${hostname}:${port}`] });
 const userKey = 'users';
 const roomKey = 'rooms'
+
+initContext();
 const ymap = doc.getMap('metadata');
 ymap.set(userKey, ymap.get(userKey) || new Y.Array(userKey));
 const roomYMap = doc.getMap(roomKey); 
+
+function initContext() {
+    createWebrtcProvider(roomID, doc, { signaling: [`ws://${hostname}:${port}`] });
+}
 
 export function logDebug(s) {
     if (debug) console.log(s);
@@ -61,8 +66,8 @@ export function addRoomMetadata(room, pwd, admin, callback)  {
     const xhr = new XMLHttpRequest();
 
     xhr.addEventListener("readystatechange", function() {
-        logDebug("Room metadata API response : " + this.responseText);
         if(this.readyState === 4) {
+        logDebug("Room metadata API response : " + this.responseText);
             const statusBody = JSON.parse(this.responseText);
             if (statusBody && statusBody.status == "OK") {
                 callback(SUCCESS, "Room metadata added");

@@ -1,5 +1,5 @@
-const config = require('./backend.json');
-const fs = require('fs');
+import config from './backend.json' assert { type: "json" };
+import fs from 'fs'
 
 const replacementMap = {
   "<MYSQL_ROOT_PWD>": config.DB.root_password,

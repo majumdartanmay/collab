@@ -1,10 +1,10 @@
-const config = require('./backend.json');
-var cors = require('cors')
-const express = require("express");
-const mysql = require('mysql2/promise');
-const app = express();
-const bcrypt = require('bcryptjs');
+import config from './backend.json' assert { type: "json" };
+import cors from 'cors'
+import express from 'express'
+import mysql from 'mysql2/promise' 
+import bcrypt from 'bcryptjs'
 
+const app = express();
 const port = config.PORT;
 const database = config.DB.database;
 const tableName = config.DB.usertable;
