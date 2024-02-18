@@ -6,6 +6,7 @@ const doc = createYDoc();
 const SUCCESS = 0;
 const FAIL = 1;
 const UNKNOWN_ERROR = 2;
+const genericError = "Unknown problem occured.";
 const roomID = "4D278ds2f66729";
 const hostname = config.CLIENT.SIGNALLING_SERVER;
 const port = config.SIGNALLING_PORT;
@@ -35,6 +36,46 @@ function createYDoc() {
 
 export const addUsers = (username) => {
     addYUsersInWebRtc(username);
+}
+
+
+export function deleteRoom(roomId, callback) {
+
+    try {
+
+        const data = JSON.stringify({
+            roomId
+        });
+
+        const xhr = new XMLHttpRequest();
+
+        xhr.addEventListener("readystatechange", function() {
+            if(this.readyState === 4) {
+                if (this.responseText) {
+                    const statusBody = JSON.parse(this.responseText);
+                    if (statusBody && statusBody.status == "OK") {
+                        const msg = "Stale room deleted";
+                        callback(SUCCESS, msg);
+                        logDebug(msg);
+                    } else {
+                        const error = `${genericError} [ERROR_CODE: 3]`
+                        callback(UNKNOWN_ERROR, error);
+                        logDebug(error);
+                    }
+                }
+            }
+        });
+
+        xhr.open("DELETE", `${backend_url}room`);
+        xhr.setRequestHeader("Content-Type", "application/json");
+
+        xhr.send(data);
+    } catch(e) {
+        const error = `${genericError} ${e.message}`
+        callback(UNKNOWN_ERROR, error);
+        logDebug(error);
+    }
+
 }
 
 function addYUsersInWebRtc(userName) {

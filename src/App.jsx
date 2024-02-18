@@ -5,7 +5,7 @@ import {bindMonaco, createWebrtcProvider} from './utils/DependencyUtils'
 import config from '../backend/backend.json'
 import './App.css';
 import CollabPrompt from './utils/CollabPrompt';
-import { roomExists,  addRoomMetadata , verifyRoomPwd, logDebug } from './utils/WebrtcUtils'
+import { roomExists,  addRoomMetadata , verifyRoomPwd, logDebug, deleteRoom } from './utils/WebrtcUtils'
 import {paramsHook, refHook, stateHook, cookiesHook } from './utils/HookUtils'
 import {validateRoomState, doHandleEditorMount} from './utils/AppUtils.jsx'
 import LinearProgress from '@mui/material/LinearProgress';
@@ -166,7 +166,21 @@ function App() {
 
   function handleUserAuth(roomName) {
     const exists = roomExists(roomName);
-    setAdmin(!exists);
+    if (!exists) {
+      deleteRoom(roomName, (success, msg) => {
+        if (success == 0) {
+          doHandleUserAuth(exists);
+        }else {
+          alert("Unable to start collab " + msg);
+        }
+      }); 
+    }else {
+      doHandleUserAuth(exists);
+    }
+  }
+
+  function doHandleUserAuth(roomExists) {
+    setAdmin(!roomExists);
     setPromptOpened(true);
   }
   

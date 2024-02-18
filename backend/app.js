@@ -28,7 +28,7 @@ app.use(
     })
 );
 
-app.post("/room", async function (req, res, next) {
+app.post("/room", async function (req, res, _) {
     try {
         await preparedQuery(`INSERT INTO ${database}.${tableName} (username, secret, roomId) VALUES (?, ?, ?)`,
             [req.body.username, await bcrypt.hash(req.body.pwd, config.SALT_LENGTH), req.body.roomId]);
@@ -38,7 +38,18 @@ app.post("/room", async function (req, res, next) {
     }
 });
 
-app.post("/login", async function (req, res, next) {
+app.delete("/room", async function (req, res, _) {
+    try {
+        await preparedQuery(`DELETE FROM ${database}.${tableName} WHERE roomId = ?`,
+            [req.body.roomId]);
+            
+        res.json({ "status": "OK" });
+    } catch (err) {
+        res.json({ "status": err.message });
+    }
+});
+
+app.post("/login", async function (req, res, _) {
     try {
         const pwd = await getSecret(req.body.roomId);
         if (!pwd) {
