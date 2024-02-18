@@ -1,5 +1,6 @@
 {
     "PORT": 24555,
+    "BACKEND_URL_SCHEME": "http",
     "DB": {
         "usertable": "users",
         "service_name": "mysql_service",
@@ -17,6 +18,7 @@
     "SIGNALLING_SERVER": "0.0.0.0",
     "BACKEND_SERVER": "0.0.0.0", 
     "CLIENT": {
-        "SIGNALLING_SERVER": "localhost"
+        "SIGNALLING_SERVER": "localhost",
+        "BACKEND_SERVER": "localhost" 
     }
 }

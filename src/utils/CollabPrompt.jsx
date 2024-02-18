@@ -15,6 +15,10 @@ export default function CollabPrompt(props) {
   function handleSumbit(event) {
     event.preventDefault();
     const password = document.getElementById("roomPwd").value;
+    if (!password) {
+      props.error = "Password cannot be empty";
+      return;
+    }
     props.data.processPwd(password, props.room);
   }
 

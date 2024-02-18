@@ -5,8 +5,8 @@ export function createWebrtcProvider(hash, doc, wsParam) {
   return new WebrtcProvider(hash, doc, wsParam);
 }
 
-export function createMonacoProvider(type, editorModel, editorSet, awareness) {
-    return new MonacoBinding()(
+export function bindMonaco(type, editorModel, editorSet, awareness) {
+    return new MonacoBinding(
       type,
       editorModel,
       editorSet,

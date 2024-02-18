@@ -16,7 +16,7 @@ app.use(cors({
     origin: 'http://localhost:10302'
 }));
 
-app.use(function (req, res, next) {
+app.use(function (_, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     next();
@@ -34,7 +34,7 @@ app.post("/room", async function (req, res, next) {
             [req.body.username, await bcrypt.hash(req.body.pwd, config.SALT_LENGTH), req.body.roomId]);
         res.json({ "status": "OK" });
     } catch (err) {
-        next(err);
+        res.json({ "status": err.message });
     }
 });
 
@@ -53,7 +53,7 @@ app.post("/login", async function (req, res, next) {
         }
         res.json({status: "INVALID", message: "Password comparison failed"});
     } catch (err) {
-        next(err);
+        res.json({status: "UNKNOWN_ERROR", message: err.message});
     }
 });
 
@@ -91,7 +91,7 @@ async function getSecret(roomId) {
     return pwd;
 }
 
-app.get("/healthcheck", async(req, res, next) => {
+app.get("/healthcheck", async(_, res, __) => {
     try {
         const rows = await query(`SELECT * FROM ${config.DB.database}.${config.DB.health_table}`) || [];
         res.json(rows);

@@ -1,13 +1,15 @@
 import Editor from "@monaco-editor/react"
 import { navigateHook } from './utils/HookUtils'
 import * as Y from "yjs";
-import {createMonacoProvider, createWebrtcProvider} from './utils/DependencyUtils'
+import {bindMonaco, createWebrtcProvider} from './utils/DependencyUtils'
 import config from '../backend/backend.json'
 import './App.css';
 import CollabPrompt from './utils/CollabPrompt';
-import { roomExists,  addRoomMetadata , verifyRoomPwd } from './utils/WebrtcUtils'
+import { roomExists,  addRoomMetadata , verifyRoomPwd, logDebug } from './utils/WebrtcUtils'
 import {paramsHook, refHook, stateHook, cookiesHook } from './utils/HookUtils'
 import {validateRoomState, doHandleEditorMount} from './utils/AppUtils.jsx'
+import LinearProgress from '@mui/material/LinearProgress';
+import Fade from "@mui/material/Fade";
 
 function App() {
 
@@ -17,6 +19,7 @@ function App() {
   const [admin, setAdmin] = stateHook(false);
   const [authFailedErrorMsg, setAuthFailedErrorMsg] = stateHook('');
   const [promptOpened, setPromptOpened] = stateHook(false);
+  const [loading, setLoading] = stateHook(true);
   const navigate = navigateHook(); 
   const editorRef = refHook(null);
   const userNameRef = refHook(null);
@@ -52,12 +55,16 @@ function App() {
       return;
     }
 
-    if (verifyRoomPwd(room, pwd)) {
-      setPromptOpened(false);
-      provisionMonacoEditor();
-    }else {
-      setAuthFailedErrorMsg('Password is not correct.');
-    }
+    setLoading(true);
+    verifyRoomPwd(room, pwd, (success, msg) => {
+      setLoading(false);
+      if (success == 0 ) { // auth was success
+        setPromptOpened(false);
+        provisionMonacoEditor();
+      } else {
+        setAuthFailedErrorMsg(msg);
+      }
+    });
   }
 
   function addPasswordToRoom(pwd, room) {
@@ -65,10 +72,16 @@ function App() {
     if (!validateRoomState(pwd, room, setAuthFailedErrorMsg)) {
       return;
     }
-
-    addRoomMetadata(room, pwd, userNameRef.current);
-    setPromptOpened(false);
-    provisionMonacoEditor();
+    setLoading(true);
+    addRoomMetadata(room, pwd, userNameRef.current, (success, msg) => {
+      setLoading(false);
+      if (success == 0) {
+        setPromptOpened(false);
+        provisionMonacoEditor();
+      } else  {
+        setAuthFailedErrorMsg(msg);
+      }
+    });
   }
 
 
@@ -145,13 +158,9 @@ function App() {
         const user = x['user'];
         if (user) {
           initUserCSS(user.clientID, user.color, user.name);
-          handleUserAddition(user.clientID, user.name);
         }
       });
     });
-  }
-
-  function handleUserAddition(clientId, userId) {
   }
 
   function handleUserAuth(roomName) {
@@ -173,20 +182,34 @@ function App() {
    * 
    * */
   function provisionMonacoEditor() {
-    const userName = userNameRef.current;
-    const currentColorCode = generateRandomColor()
-    const doc = new Y.Doc();
-    const provider = createWebrtcProvider()(hash, doc, { signaling: [`ws://${hostname}:${port}`] });
-    const type = doc.getText("monaco");
-    const awareness = provider.awareness
 
-    createMonacoProvider(
+    const userName = userNameRef.current;
+    logDebug(`Attempting to provision monaco editor for ${userName}`);
+
+    const currentColorCode = generateRandomColor()
+    logDebug(`Color code is ${currentColorCode}`);
+
+    const doc = new Y.Doc();
+    logDebug(`Y doc is created `);
+
+    const provider = createWebrtcProvider(hash, doc, { signaling: [`ws://${hostname}:${port}`] });
+    logDebug(`Provider is created for ${hash}`);
+
+    const type = doc.getText("monaco");
+    logDebug(`Monaco editor has been created`);
+
+    const awareness = provider.awareness
+    logDebug(`User awareness for ${hash} has been created`);
+
+    bindMonaco(
       type,
       editorRef.current.getModel(),
       new Set([editorRef.current]),
       awareness);
+    logDebug(`Monaco provider has been created for ${hash}`);
 
     notifyUserPresence(doc.clientID, currentColorCode, awareness, userName);
+    logDebug(`User presence has been notified`);
   }
 
   /**
@@ -220,7 +243,15 @@ function App() {
 
   return (
     <div id="app-container">
+
+      <Fade in = {loading} style={{ transitionDelay: loading ? "800ms" : "0ms",}} unmountOnExit> 
+
+        <LinearProgress />
+
+      </Fade>
+
       <CollabPrompt data={admin ? createPasswordProps : requirePasswordProps} room={hash} open={promptOpened} error = {authFailedErrorMsg}/>
+
       <div id="editor-container" data-testid="editor-container">
         <Editor
           data-testid = "monaco-editor-collab"
