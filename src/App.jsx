@@ -11,6 +11,18 @@ import {validateRoomState, doHandleEditorMount} from './utils/AppUtils.jsx'
 import LinearProgress from '@mui/material/LinearProgress';
 import Fade from "@mui/material/Fade";
 
+/**
+ * @typedef {Object} ComponentController
+ * @property {import("react").Dispatch} setAdmin - Sets
+ * the admin state of the component
+ *
+ * @property {import("react").Dispatch} setPromptOpened - If true,
+ * it will open open CollabPrompt 
+ *
+ * @property {@function} callback - If called,
+ * it will call the @see {@link handleUserAuth} function
+ */
+
 function App() {
 
   // hooks
@@ -36,8 +48,6 @@ function App() {
   const port = config.SIGNALLING_PORT;
   const userColorState = {}
   
-  /**
-   * */
   const requirePasswordProps = {
     prompt: "Please enter the password",
     processPwd: verifyPwd
@@ -49,6 +59,12 @@ function App() {
     room: null
   }
 
+  /**
+   * Validates the password against the room
+   *
+   * @param {string} pwd - Password of the room
+   * @param {string} room - Room identification
+   */
   function verifyPwd(pwd, room) {
 
     if (!validateRoomState(pwd, room, setAuthFailedErrorMsg)) {
@@ -68,6 +84,14 @@ function App() {
     });
   }
 
+
+  /**
+   * Maps a password to a room. Typically called when
+   * a room is being created
+   *
+   * @param {string} pwd - Password of the room
+   * @param {string} room - Room identification
+   */
   function addPasswordToRoom(pwd, room) {
 
     if (!validateRoomState(pwd, room, setAuthFailedErrorMsg)) {
@@ -86,6 +110,12 @@ function App() {
   }
 
 
+  /**
+   * Add CSS to the the doc. This is called when some CSS
+   * is injected when a user is added to a room.
+   *
+   * @param {string} css - CSS style. 
+   */
   function addCSS(css) {
 
     var head = document.getElementsByTagName('head')[0];
@@ -99,6 +129,14 @@ function App() {
     head.appendChild(s);
   }
 
+
+  /**
+   * CSS needs to be added to creates cursor for a new user. 
+   *
+   * @param {string} currentColorCode - Color of the cursor
+   * @param {string} userHash - Some kind of unique ID for a user. For us, this is the YJS client id
+   * @param {string} name - username
+   */
   function updateYRemoteCSS(currentColorCode, userHash, name) {
 
     const yRemoteSelectionAttr = `.yRemoteSelection-${userHash}`;
@@ -135,6 +173,13 @@ function App() {
     addCSS(css)
   }
 
+  /**
+   * Start creating the user's css
+   *
+   * @param {string} clientID - YJS client ID
+   * @param {string} color - Every user for a room gets a color for themselves
+   * @param {string} name - username
+   */
   function initUserCSS(clientID, color, name) {
 
     const clientId = clientID;
@@ -145,6 +190,14 @@ function App() {
 
   }
 
+  /**
+   * Steps to perform when a user join a room
+   *
+   * @param {string} clientID - YJS client id
+   * @param {string} currentColorCode - Every user for a room gets a color for themselves
+   * @param {YJS.awareness} awareness  - Its an awareness object provided by YJS library
+   * @param {string} userName - Username
+   */
   function notifyUserPresence(clientID, currentColorCode, awareness, userName) {
 
     awareness.setLocalStateField('user', {
@@ -164,6 +217,11 @@ function App() {
     });
   }
 
+  /**
+   * Steps to perform when a user tries to join a room
+   *
+   * @param {string} roomName - Room identification
+   */
   function handleUserAuth(roomName) {
     const exists = roomExists(roomName);
     if (!exists) {
@@ -179,6 +237,13 @@ function App() {
     }
   }
 
+  /**
+   * Steps to perform when a user tries to join a room.
+   * But this method doesn't need to determine whether the room
+   * exists
+   *
+   * @param {boolean} roomExists - <code>true</code> if room exists
+   */
   function doHandleUserAuth(roomExists) {
     setAdmin(!roomExists);
     setPromptOpened(true);
@@ -188,14 +253,20 @@ function App() {
    * @param {MonacoEditor} editor
    *
    * */
+  /**
+   * Steps to perform when the monaco editor is being mounted
+   *
+   * @param {Object} editor - Instance of the monaco editor
+   */
   function handleEditorDidMount(editor, _) {
     doHandleEditorMount(cookies, editorRef, userNameRef, editor,componentController, navigate);
   }
 
   /**
-   * Method to enter the data in the editor. 
-   * 
-   * */
+   * When the monaco editor needs to be populated
+   * with the data
+   *
+   */
   function provisionMonacoEditor() {
 
     const userName = userNameRef.current;

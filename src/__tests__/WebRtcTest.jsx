@@ -1,5 +1,10 @@
 import * as Y from 'yjs'
 
+/**
+ * Checks basic YJS input/output functions
+ *
+ * @async
+ */
 test("Basic YJS functionality test", async () => {
     // Yjs documents are collections of
     // shared objects that sync automatically.

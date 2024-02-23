@@ -13,6 +13,12 @@ import { userNamePtyAtom } from './atoms/MetadataAtom'
 import { addUsers  } from './utils/WebrtcUtils'
 import { navigateHook, cookiesHook, atomHook, createAtomInstance } from './utils/HookUtils'
 
+/**
+ * Functional component for copy right UI
+ *
+ * @param {Object} props - Properties which are being used to create copyright UI
+ * @returns {React.Component} Copyright react component
+ */
 function Copyright(props) {
     return (
         <Typography 
@@ -35,6 +41,12 @@ const defaultTheme = createTheme({
 const userIdTVErrorAtom = createAtomInstance(false);
 const userIdTVErrorMsgAtom = createAtomInstance('');
 
+/**
+ * Collab home component. Its responsibility is to ask
+ * for the username and the room identification
+ *
+ * @returns {React.Component} CollabHome component
+ */
 export default function CollabHome() {
     // hooks
     const [, setCookie] = cookiesHook(["user"]);
@@ -43,6 +55,11 @@ export default function CollabHome() {
     const [, setUsername] = atomHook(userNamePtyAtom);
     const navigate = navigateHook(); 
     // variables
+    /**
+     * Gets triggered when a user wants to enter the room of their choice
+     *
+     * @param {Event} event - Click event
+     */
     const handleSubmit = (event) => {
 
         event.preventDefault();
@@ -60,6 +77,11 @@ export default function CollabHome() {
         navigateToApp(roomId)
     };
     
+    /**
+     * Navigates to http(s)://<collab>/app/<roomId> if possible
+     *
+     * @param {string} roomId - Room identification
+     */
     function navigateToApp(roomId) {
         try {
             navigate(`/app/${roomId}`);

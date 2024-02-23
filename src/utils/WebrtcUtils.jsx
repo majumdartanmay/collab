@@ -22,23 +22,53 @@ const ymap = doc.getMap('metadata');
 ymap.set(userKey, ymap.get(userKey) || new Y.Array(userKey));
 const roomYMap = doc.getMap(roomKey); 
 
+/**
+ * Creates an instance of WebrtcProvider
+ * using the roomId and the YJS document
+ * for the room
+ *
+ */
 function initContext() {
     createWebrtcProvider(roomID, doc, { signaling: [`ws://${hostname}:${port}`] });
 }
 
+/**
+ * Commmon logger for the application
+ * It will only print the log if the
+ * relevant flag is true in localStroage
+ *
+ * @param {string} s - Log message
+ */
 export function logDebug(s) {
     if (localStorage.collab) console.log(s);
 }
 
+/**
+ * Wrapper method to create yjs document
+ *
+ * @returns {Y.Doc} YJS document
+ */
 function createYDoc() {
     return new Y.Doc();
 }
 
+/**
+ * Adds user to the YJS document
+ * which is mapped to roomid = #roomId
+ *
+ * @param {string} username - Username to add
+ */
 export const addUsers = (username) => {
     addYUsersInWebRtc(username);
 }
 
 
+/**
+ * Deletes the room for the backend database
+ *
+ * @param {string} roomId - Room to delete
+ * @param {@function} callback - Callback to broadcast result
+ */
 export function deleteRoom(roomId, callback) {
 
     try {
@@ -78,6 +108,11 @@ export function deleteRoom(roomId, callback) {
 
 }
 
+/**
+ * Adds user to the YJS document
+ *
+ * @param {string} userName - Username to add
+ */
 function addYUsersInWebRtc(userName) {
     updateYDoc();
     const usersY = ymap.get(userKey);
@@ -86,11 +121,26 @@ function addYUsersInWebRtc(userName) {
     usersY.insert(0, users);
 }
 
+/**
+ * Updates the YJS document
+ *
+ */
 function updateYDoc() {
     const update = Y.encodeStateAsUpdate(doc);
     Y.applyUpdate(doc, update);
 }
 
+/**
+ * Each room needs to be mapped with a password, 
+ * admin username. This function will log this 
+ * information in YJS doc and also perist the 
+ * information in the collab database
+ *
+ * @param {string} room - Room to add
+ * @param {string} pwd - Password to access the room
+ * @param {string} admin - Username  of the room creator
+ * @param {@function} callback - Function to call with the processing information
+ */
 export function addRoomMetadata(room, pwd, admin, callback)  {
 
     roomYMap.set(room, admin);
@@ -127,6 +177,12 @@ export function addRoomMetadata(room, pwd, admin, callback)  {
     xhr.send(data);
 }
 
+/**
+ * Checks if the room already exists
+ *
+ * @param {string} room - Room identification
+ * @returns {boolean} <code>true</code> if room exists
+ */
 export function roomExists(room) {
     logDebug(`Room json ${JSON.stringify(roomYMap.toJSON())}`);
     const exists = !!roomYMap.get(room);
@@ -134,6 +190,13 @@ export function roomExists(room) {
     return exists;
 }
 
+/**
+ * Checks the room password
+ *
+ * @param {string} roomId - Room identification
+ * @param {string} pwd - Password of the room
+ * @param {@function} callback - Callback to broadcast results
+ */
 export function verifyRoomPwd(roomId, pwd, callback) {
 
     var data = JSON.stringify({
@@ -165,6 +228,11 @@ export function verifyRoomPwd(roomId, pwd, callback) {
     xhr.send(data);
 }
 
+/**
+ * Get users from YJS document
+ *
+ * @returns {Array} List of users who are online
+ */
 export function getYUsersInWebrtc() {
     return ymap.get(userKey).toArray();
 }

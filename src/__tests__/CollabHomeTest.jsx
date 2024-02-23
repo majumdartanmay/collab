@@ -4,6 +4,11 @@ import userEvent from '@testing-library/user-event'
 import {navigationMocker} from './TestUtils'
 import CollabHome from '../CollabHome';
 
+/**
+ * Check the elements of the <CollabHome>
+ * component
+ *
+ */
 test("CollabHome Dom element testing", () => {
     render(<CollabHome/>);
 
@@ -17,6 +22,11 @@ test("CollabHome Dom element testing", () => {
     
 })
 
+/**
+ * Check the value of different text fields
+ * and see if their value reflects
+ *
+ */
 test('Test collab home change value', () => {
 
     render(<CollabHome />);
@@ -41,10 +51,21 @@ test('Test collab home change value', () => {
     expect(roomIdElement).toHaveValue(testValue);
 });
 
+/**
+ * We want to mock the navigation hook before all tests
+ *
+ */
 beforeAll(() => {
     navigationMocker();
 });
 
+/**
+ * Enter the username and the room and
+ * then check the behavior of the submit
+ * button
+ *
+ * @async
+ */
 test('Handle submit behaviour', async () => {
    
     const testRoomId = "breakingbenjamin";

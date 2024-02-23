@@ -8,10 +8,22 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { navigateHook,  } from './HookUtils'
 
+/**
+ * Prompts the user for password of the room
+ *
+ * @param {Object} props - Component property
+ * @returns {React.Component} Collab Prompt
+ */
 export default function CollabPrompt(props) {
 
   const navigate = navigateHook();
 
+  /**
+   * Called when the user has
+   * supplied their password
+   *
+   * @param {Event} event - Event object passed by button
+   */
   function handleSumbit(event) {
     event.preventDefault();
     const password = document.getElementById("roomPwd").value;
@@ -22,11 +34,22 @@ export default function CollabPrompt(props) {
     props.data.processPwd(password, props.room);
   }
 
+  /**
+   * Goes to the home page
+   *
+   */
   function goToHome() {
     navigate("/");
   }
   
-  function handleCancel(e) {
+  /**
+   * Called when the user cancels
+   * the operation
+   *
+   * @param {Event} _ - Event object of the cancel
+   * button
+   */
+  function handleCancel(_) {
     goToHome();
   }
 
