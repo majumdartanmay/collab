@@ -53,7 +53,7 @@ app.post("/login", async function (req, res, _) {
     try {
         const pwd = await getSecret(req.body.roomId);
         if (!pwd) {
-            res.json({status: "NOT_FOUND", message: "User not found"});
+            res.json({status: "NOT_FOUND", message: "Room not found"});
             return;
         }
 

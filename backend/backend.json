@@ -18,7 +18,7 @@
     "SIGNALLING_SERVER": "0.0.0.0",
     "BACKEND_SERVER": "0.0.0.0", 
     "CLIENT": {
-        "SIGNALLING_SERVER": "192.168.56.1",
+        "SIGNALLING_SERVER": "localhost",
         "BACKEND_SERVER": "localhost" 
     }
 }

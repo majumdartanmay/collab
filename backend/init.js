@@ -9,7 +9,7 @@ const replacementMap = {
   "<MYSQL_PORT>": config.DB.port,
   "<MYSQL_HOST>": config.DB.host,
   "<HOST_APPLICATION_PORT>": config.AUTH_PORT,
-  "<CONTAINER_APPLICATION_PORT>": config.PORT,
+  "<CONTAINER_APPLICATION_PORT>": config.AUTH_PORT,
   "<MYSQL_SERVICE_NAME>": config.DB.service_name,
   "<MYSQL_TABLE>": config.DB.usertable,
   "<MYSQL_HEALTH_TABLE>": config.DB.health_table,
