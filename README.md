@@ -7,6 +7,9 @@ This is light weight realtime text collabation tool. It has the following key co
 3. [WebRTC](https://webrtc.org/) as communication protocol
 4. [Node](https://nodejs.org/en) Node js for signalling server and authentication server
 5. [MySQL](https://www.mysql.com/) MySQL database to store room passwords and room creator information
+
+![User flow](/screenshots/BasicCollabUserFlow.gif)
+
 ----
 
 # Build 
