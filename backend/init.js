@@ -8,7 +8,7 @@ const replacementMap = {
   "<MYSQL_PASSWORD>": config.DB.password,
   "<MYSQL_PORT>": config.DB.port,
   "<MYSQL_HOST>": config.DB.host,
-  "<HOST_APPLICATION_PORT>": config.PORT,
+  "<HOST_APPLICATION_PORT>": config.AUTH_PORT,
   "<CONTAINER_APPLICATION_PORT>": config.PORT,
   "<MYSQL_SERVICE_NAME>": config.DB.service_name,
   "<MYSQL_TABLE>": config.DB.usertable,

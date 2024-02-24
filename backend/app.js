@@ -5,7 +5,7 @@ import mysql from 'mysql2/promise'
 import bcrypt from 'bcryptjs'
 
 const app = express();
-const port = config.PORT;
+const port = config.AUTH_PORT;
 const database = config.DB.database;
 const tableName = config.DB.usertable;
 

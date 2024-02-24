@@ -1,5 +1,5 @@
 {
-    "PORT": 24555,
+    "AUTH_PORT": 24555,
     "BACKEND_URL_SCHEME": "http",
     "DB": {
         "usertable": "users",
