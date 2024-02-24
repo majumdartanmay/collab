@@ -81,6 +81,7 @@ You can run the DDL and DML scripts which we have added in [schema-template.sql]
 
 ```
 cd backend && npm install
+npm install
 node app.js
 ```
 
@@ -93,6 +94,7 @@ npm run dev
 If after compilation you want to run on production mode in local. Then run the following commands
 
 ```
+npm install
 npm run build
 npm run preview
 ```
@@ -104,5 +106,6 @@ npm run preview
 Unit tests have been created using [jest](https://jestjs.io/docs/tutorial-react)
 
 ```
+npm install
 npm run test
 ```
