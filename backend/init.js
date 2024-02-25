@@ -21,7 +21,6 @@ const replacementMap = {
 function loadEnv() {
   replaceAndSaveFile('docker-compose-template.yml', replacementMap, 'docker-compose.yml');
   replaceAndSaveFile('schema-template.sql', replacementMap, 'schema.sql');
-  
 }
 
 // Function to load a file, replace a pattern, and save it again
