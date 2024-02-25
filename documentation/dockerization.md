@@ -12,4 +12,4 @@ to hard code the files again.
 
 ## Commands for docker images
 
-`node init.js ; docker-compose build --no-cache ; docker-compose up`
+`cd backend ; node init.js ; docker-compose build --no-cache ; docker-compose up`

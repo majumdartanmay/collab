@@ -1,0 +1,12 @@
+{
+    "usertable": "users",
+    "service_name": "mysql_service",
+    "host": "localhost",
+    "user": "collab_user",
+    "password": "Collab_11122023",
+    "database": "collab",
+    "port": 21992,
+    "connectTimeout": 60000,
+    "root_password": "MySQLRootPassword",
+    "health_table": "collab_health_table"
+}

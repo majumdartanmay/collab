@@ -5,15 +5,13 @@ import * as map from 'lib0/map'
 
 const wsReadyStateConnecting = 0
 const wsReadyStateOpen = 1
-const wsReadyStateClosing = 2 // eslint-disable-line
-const wsReadyStateClosed = 3 // eslint-disable-line
 
 const pingTimeout = 30000
 
 const port = config.SIGNALLING_PORT
 const wss = new WebSocketServer({ noServer: true })
 
-const server = http.createServer((request, response) => {
+const server = http.createServer((_, response) => {
   response.writeHead(200, { 'Content-Type': 'text/plain' })
   response.end('okay')
 })

@@ -1,24 +1,12 @@
 {
-    "PORT": 24555,
+    "AUTH_PORT": 24555,
     "BACKEND_URL_SCHEME": "http",
-    "DB": {
-        "usertable": "users",
-        "service_name": "mysql_service",
-        "host": "localhost",
-        "user": "collab_user",
-        "password": "Collab_11122023",
-        "database": "collab",
-        "port": 21992,
-        "connectTimeout": 60000,
-        "root_password": "MySQLRootPassword",
-        "health_table": "collab_health_table"
-    },
     "SALT_LENGTH": 7,
     "SIGNALLING_PORT": 24444,
     "SIGNALLING_SERVER": "0.0.0.0",
     "BACKEND_SERVER": "0.0.0.0", 
     "CLIENT": {
-        "SIGNALLING_SERVER": "192.168.56.1",
+        "SIGNALLING_SERVER": "localhost",
         "BACKEND_SERVER": "localhost" 
     }
 }
