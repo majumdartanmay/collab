@@ -1,6 +1,6 @@
 import * as Y from "yjs";
 import config from '../../backend/backend.json'
-import {createWebrtcProvider} from './DependencyUtils'
+import { createWebrtcProvider } from './DependencyUtils'
 
 const doc = createYDoc();
 const SUCCESS = 0;

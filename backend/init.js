@@ -1,18 +1,19 @@
 import config from './backend.json' assert { type: "json" };
+import DB from './db.json' assert { type: "json" };
 import fs from 'fs'
 
 const replacementMap = {
-  "<MYSQL_ROOT_PWD>": config.DB.root_password,
-  "<MYSQL_DATABASE>": config.DB.database,
-  "<MYSQL_USER>": config.DB.user,
-  "<MYSQL_PASSWORD>": config.DB.password,
-  "<MYSQL_PORT>": config.DB.port,
-  "<MYSQL_HOST>": config.DB.host,
+  "<MYSQL_ROOT_PWD>": DB.root_password,
+  "<MYSQL_DATABASE>": DB.database,
+  "<MYSQL_USER>": DB.user,
+  "<MYSQL_PASSWORD>": DB.password,
+  "<MYSQL_PORT>": DB.port,
+  "<MYSQL_HOST>": DB.host,
   "<HOST_APPLICATION_PORT>": config.AUTH_PORT,
   "<CONTAINER_APPLICATION_PORT>": config.AUTH_PORT,
-  "<MYSQL_SERVICE_NAME>": config.DB.service_name,
-  "<MYSQL_TABLE>": config.DB.usertable,
-  "<MYSQL_HEALTH_TABLE>": config.DB.health_table,
+  "<MYSQL_SERVICE_NAME>": DB.service_name,
+  "<MYSQL_TABLE>": DB.usertable,
+  "<MYSQL_HEALTH_TABLE>": DB.health_table,
   "<SIGNALLING_SERVER_PORT>": config.SIGNALLING_PORT,
   "<CONTAINER_SIGNALLING_SERVER_PORT>": config.SIGNALLING_PORT
 }

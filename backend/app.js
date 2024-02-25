@@ -1,4 +1,5 @@
 import config from './backend.json' assert { type: "json" };
+import DB from './db.json' assert { type: "json" };
 import cors from 'cors'
 import express from 'express'
 import mysql from 'mysql2/promise' 
@@ -6,15 +7,13 @@ import bcrypt from 'bcryptjs'
 
 const app = express();
 const port = config.AUTH_PORT;
-const database = config.DB.database;
-const tableName = config.DB.usertable;
+const database = DB.database;
+const tableName = DB.usertable;
 
 app.use(express.json());
 
 //Enable cors
-app.use(cors({
-    origin: 'http://localhost:10302'
-}));
+app.use(cors({}));
 
 app.use(function (_, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
@@ -78,9 +77,9 @@ async function query(sql, params) {
 async function createConnection() {
 
     const connection = await mysql.createConnection({
-        host: config.DB.service_name,
-        user: config.DB.user,
-        password: config.DB.password
+        host: DB.service_name,
+        user: DB.user,
+        password: DB.password
     });
 
     return connection;
@@ -104,7 +103,7 @@ async function getSecret(roomId) {
 
 app.get("/healthcheck", async(_, res, __) => {
     try {
-        const rows = await query(`SELECT * FROM ${config.DB.database}.${config.DB.health_table}`) || [];
+        const rows = await query(`SELECT * FROM ${DB.database}.${DB.health_table}`) || [];
         res.json(rows);
     } catch(e) {
         res.json(e);

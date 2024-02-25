@@ -45,4 +45,3 @@ export function bindMonaco(yjsText, editorModel, editorSet, awareness) {
       editorSet,
       awareness);
 }
-
