@@ -1,6 +1,6 @@
 import * as Y from "yjs";
 import config from '../../backend/backend.json'
-import {createWebrtcProvider} from './DependencyUtils'
+import { createWebrtcProvider } from './DependencyUtils'
 
 const doc = createYDoc();
 const SUCCESS = 0;
@@ -11,7 +11,7 @@ const roomID = "4D278ds2f66729";
 const hostname = config.CLIENT.SIGNALLING_SERVER;
 const port = config.SIGNALLING_PORT;
 const backend_host = config.CLIENT.BACKEND_SERVER;
-const backend_port = config.PORT;
+const backend_port = config.AUTH_PORT;
 const backend_scheme = config.BACKEND_URL_SCHEME;
 const backend_url = `${backend_scheme}://${backend_host}:${backend_port}/`
 const userKey = 'users';
