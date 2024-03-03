@@ -3,7 +3,7 @@ name: Collab Unit Tests
 on:
   push:
     branches:
-      - feature/1-add-password-protection-in-individual-rooms
+      - main
 
 jobs:
   UnitTests:
