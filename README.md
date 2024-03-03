@@ -111,7 +111,7 @@ npm run preview
 
 ## Run unit tests
 
-[![Collab Unit Tests](https://github.com/majumdartanmay/collab/actions/workflows/UnitTests.yml/badge.svg?branch=feature%2F1-add-password-protection-in-individual-rooms)](https://github.com/majumdartanmay/collab/actions/workflows/UnitTests.yml)
+[![Collab Unit Tests](https://github.com/majumdartanmay/collab/actions/workflows/UnitTests.yml/badge.svg)](https://github.com/majumdartanmay/collab/actions/workflows/UnitTests.yml)
 
 Unit tests have been created using [jest](https://jestjs.io/docs/tutorial-react)
 
