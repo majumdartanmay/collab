@@ -52,22 +52,12 @@ To configure the details of this server go to [backend.json](/backend/backend.js
 {
     "AUTH_PORT": 24555,
     "BACKEND_URL_SCHEME": "http",
-    "DB": {
-        "usertable": "users",
-        "service_name": "mysql_service",
-        "host": "localhost",
-        "user": "collab_user",
-        "password": "Collab_11122023",
-        "database": "collab",
-        "port": 21992,
-        "connectTimeout": 60000,
-        "root_password": "MySQLRootPassword",
-        "health_table": "collab_health_table"
-    },
     "SALT_LENGTH": 7,
+    "SIGNALLING_PORT": 24444,
+    "SIGNALLING_SERVER": "0.0.0.0",
     "BACKEND_SERVER": "0.0.0.0", 
     "CLIENT": {
-        "SIGNALLING_SERVER": "192.168.56.1",
+        "SIGNALLING_SERVER": "localhost",
         "BACKEND_SERVER": "localhost" 
     }
 }
@@ -76,7 +66,24 @@ To configure the details of this server go to [backend.json](/backend/backend.js
 
 These properties are relevant for the authentication service. App.js will run in the AUTH_PORT.
 
-You can configure the DB details in the DB.* properties. 
+### Configuring DB details
+
+To configure the details of this server go to [db.json](/backend/db.json) and configure the listed details
+
+```json
+{
+    "usertable": "users",
+    "service_name": "mysql_service",
+    "host": "localhost",
+    "user": "collab_user",
+    "password": "Collab_11122023",
+    "database": "collab",
+    "port": 21992,
+    "connectTimeout": 60000,
+    "root_password": "MySQLRootPassword",
+    "health_table": "collab_health_table"
+}
+```
 
 ### Create the collab database in MySQL
 
