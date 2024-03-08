@@ -1,6 +1,6 @@
+import { WebrtcProvider } from "y-webrtc";
 import * as Y from "yjs";
 import config from '../../backend/backend.json'
-import { createWebrtcProvider } from './DependencyUtils'
 
 const doc = createYDoc();
 const SUCCESS = 0;
@@ -17,10 +17,94 @@ const backend_url = `${backend_scheme}://${backend_host}:${backend_port}/`
 const userKey = 'users';
 const roomKey = 'rooms'
 
+class CustomRtcProvider extends WebrtcProvider {
+
+    emit (name, args) {
+        const output = super.emit(name, args);
+        logDebug(`CustomRtcProvider is working`);
+        return output;
+    }
+
+}
+
 initContext();
 const ymap = doc.getMap('metadata');
 ymap.set(userKey, ymap.get(userKey) || new Y.Array(userKey));
 const roomYMap = doc.getMap(roomKey); 
+
+/**
+ * Stores the webrtc provider in a global cache.
+ *
+ * @param {string} roomID - Room identification
+ * @param {WebrtcProvider} provider - The webrtc provider in question
+ */
+function addToCollabCache(roomId, provider) {
+
+    window.colllabCache = getCacheObject();
+    window.collabCache[roomId] = provider;
+    logDebug(`Stored provider for ${roomId} in cache`);
+}
+
+/**
+ * Creates the cache object for collab
+ *
+ * @returns {Object} Cache map
+ */
+function getCacheObject() {
+
+    if (window.collabCache == undefined) {
+        window.collabCache = {};
+    }
+
+    return window.collabCache;
+}
+
+/**
+ * Gets you the cached webrtc provider, if it exists
+ *
+ * @param {string} roomId - Room identification
+ * @returns {WebrtcProvider} cached web rtc provider
+ */
+function getOldProvider(roomId) {
+    return getCacheObject()[roomId];
+}
+
+/**
+ * Creates a WebrtcProvider
+ *
+ * @param {string} hash - Hash of the room
+ *
+ * @param {Doc} doc - A YJS document. This will be bounded
+ * to the WebRtc provider
+ *
+ * @param {Object} wsParam - Parameters of the WebrtcProvider
+ * @see {@link WebrtcProvider#constructor}
+ *
+ * @returns {WebrtcProvider} instance of the webrtc provider
+ */
+export function createWebrtcProvider(hash, doc, wsParam) {
+
+    const oldProvider = getOldProvider(hash);
+    if (oldProvider == undefined) {
+        logDebug(`Old provider for ${hash} doesn't exist`);
+    }else {
+
+        logDebug(`Found old provider for ${hash}`);
+        if (oldProvider.connected) {
+            logDebug(`${hash} has a cached provider. Destryoing it...`);
+            oldProvider.room.disconnect();
+
+        } else {
+
+            logDebug(`No old  web rtc provider for ${hash}. Creating a new one`);
+        }
+    }
+
+    const provider =  new CustomRtcProvider(hash, doc, wsParam);
+
+    addToCollabCache(hash, provider);
+    return provider;
+}
 
 /**
  * Creates an instance of WebrtcProvider

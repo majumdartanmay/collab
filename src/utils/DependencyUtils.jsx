@@ -1,24 +1,5 @@
-import { WebrtcProvider } from "y-webrtc"
 import { MonacoBinding } from 'y-monaco';
-import { Doc } from "yjs";
 
-
-/**
- * Creates a WebrtcProvider
- *
- * @param {string} hash - Hash of the room
- *
- * @param {Doc} doc - A YJS document. This will be bounded
- * to the WebRtc provider
- *
- * @param {Object} wsParam - Parameters of the WebrtcProvider
- * @see {@link WebrtcProvider#constructor}
- *
- * @returns {WebrtcProvider} instance of the webrtc provider
- */
-export function createWebrtcProvider(hash, doc, wsParam) {
-  return new WebrtcProvider(hash, doc, wsParam);
-}
 
 /**
  * Binds the YJS document for the room
