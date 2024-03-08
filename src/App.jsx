@@ -1,11 +1,11 @@
 import Editor from "@monaco-editor/react"
 import { navigateHook } from './utils/HookUtils'
 import * as Y from "yjs";
-import {bindMonaco, createWebrtcProvider} from './utils/DependencyUtils'
+import {bindMonaco } from './utils/DependencyUtils'
 import config from '../backend/backend.json'
 import './App.css';
 import CollabPrompt from './utils/CollabPrompt';
-import { roomExists,  addRoomMetadata , verifyRoomPwd, logDebug, deleteRoom } from './utils/WebrtcUtils'
+import { roomExists,  addRoomMetadata , verifyRoomPwd, logDebug, deleteRoom, createWebrtcProvider } from './utils/WebrtcUtils'
 import {paramsHook, refHook, stateHook, cookiesHook } from './utils/HookUtils'
 import {validateRoomState, doHandleEditorMount} from './utils/AppUtils.jsx'
 import LinearProgress from '@mui/material/LinearProgress';
