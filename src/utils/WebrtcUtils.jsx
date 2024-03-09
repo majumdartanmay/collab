@@ -17,15 +17,6 @@ const backend_url = `${backend_scheme}://${backend_host}:${backend_port}/`
 const userKey = 'users';
 const roomKey = 'rooms'
 
-class CustomRtcProvider extends WebrtcProvider {
-
-    emit (name, args) {
-        const output = super.emit(name, args);
-        logDebug(`CustomRtcProvider is working`);
-        return output;
-    }
-
-}
 
 initContext();
 const ymap = doc.getMap('metadata');
@@ -40,7 +31,7 @@ const roomYMap = doc.getMap(roomKey);
  */
 function addToCollabCache(roomId, provider) {
 
-    window.colllabCache = getCacheObject();
+    window.collabCache = getCacheObject();
     window.collabCache[roomId] = provider;
     logDebug(`Stored provider for ${roomId} in cache`);
 }
@@ -87,20 +78,21 @@ export function createWebrtcProvider(hash, doc, wsParam) {
     const oldProvider = getOldProvider(hash);
     if (oldProvider == undefined) {
         logDebug(`Old provider for ${hash} doesn't exist`);
-    }else {
+    } else {
 
         logDebug(`Found old provider for ${hash}`);
         if (oldProvider.connected) {
-            logDebug(`${hash} has a cached provider. Destryoing it...`);
-            oldProvider.room.disconnect();
-
+            logDebug(`${hash} has a cached provider. Destroying it...`);
+            oldProvider.destroy();
+            oldProvider.connect();
+            return oldProvider;
         } else {
-
             logDebug(`No old  web rtc provider for ${hash}. Creating a new one`);
         }
     }
 
-    const provider =  new CustomRtcProvider(hash, doc, wsParam);
+    const provider =  new WebrtcProvider(hash, doc, wsParam);
+    provider.on('status', (event) => { console.log(`Got a status update ${event.connected}`) })
 
     addToCollabCache(hash, provider);
     return provider;
