@@ -65,7 +65,7 @@ function getOldProvider(roomId) {
  *
  * @param {string} hash - Hash of the room
  *
- * @param {Doc} doc - A YJS document. This will be bounded
+ * @param {YJS} doc - A YJS document. This will be bounded
  * to the WebRtc provider
  *
  * @param {Object} wsParam - Parameters of the WebrtcProvider
@@ -83,9 +83,6 @@ export function createWebrtcProvider(hash, doc, wsParam) {
         logDebug(`Found old provider for ${hash}`);
         if (oldProvider.connected) {
             logDebug(`${hash} has a cached provider. Destroying it...`);
-            oldProvider.destroy();
-            oldProvider.connect();
-            return oldProvider;
         } else {
             logDebug(`No old  web rtc provider for ${hash}. Creating a new one`);
         }
@@ -94,7 +91,7 @@ export function createWebrtcProvider(hash, doc, wsParam) {
     const provider =  new WebrtcProvider(hash, doc, wsParam);
     provider.on('status', (event) => { console.log(`Got a status update ${event.connected}`) })
 
-    addToCollabCache(hash, provider);
+    // addToCollabCache(hash, provider);
     return provider;
 }
 
@@ -116,7 +113,9 @@ function initContext() {
  * @param {string} s - Log message
  */
 export function logDebug(s) {
-    if (localStorage.collab) console.log(s);
+    if (localStorage.collab) {
+        console.log(`%c ${s}`, 'background: #222; color: #bada55');
+    }
 }
 
 /**
