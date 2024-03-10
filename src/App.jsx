@@ -1,13 +1,13 @@
 import Editor from "@monaco-editor/react"
 import { navigateHook } from './utils/HookUtils'
 import * as Y from "yjs";
-import {bindMonaco, createWebrtcProvider} from './utils/DependencyUtils'
-import config from '../backend/backend.json'
+import {bindMonaco } from './utils/DependencyUtils'
+import config from '../backend/backend.json';
 import './App.css';
 import CollabPrompt from './utils/CollabPrompt';
-import { roomExists,  addRoomMetadata , verifyRoomPwd, logDebug, deleteRoom } from './utils/WebrtcUtils'
+import { roomExists,  addRoomMetadata , verifyRoomPwd, logDebug, deleteRoom, createWebrtcProvider, initCollabState, getConnectedOldProvider } from './utils/WebrtcUtils'
 import {paramsHook, refHook, stateHook, cookiesHook } from './utils/HookUtils'
-import {validateRoomState, doHandleEditorMount} from './utils/AppUtils.jsx'
+import {validateRoomState, doHandleEditorMount} from './utils/AppUtils.jsx';
 import LinearProgress from '@mui/material/LinearProgress';
 import Fade from "@mui/material/Fade";
 
@@ -259,6 +259,7 @@ function App() {
    * @param {Object} editor - Instance of the monaco editor
    */
   function handleEditorDidMount(editor, _) {
+    initCollabState();
     doHandleEditorMount(cookies, editorRef, userNameRef, editor,componentController, navigate);
   }
 
@@ -275,10 +276,13 @@ function App() {
     const currentColorCode = generateRandomColor()
     logDebug(`Color code is ${currentColorCode}`);
 
-    const doc = new Y.Doc();
+    const oldProvider = getConnectedOldProvider(hash);
+    logDebug(`Old provider state ${!!oldProvider}`);
+
+    const doc = oldProvider ? oldProvider.doc : new Y.Doc();
     logDebug(`Y doc is created `);
 
-    const provider = createWebrtcProvider(hash, doc, { signaling: [`ws://${hostname}:${port}`] });
+    const provider = oldProvider ? oldProvider : createWebrtcProvider(hash, doc, { signaling: [`ws://${hostname}:${port}`] });
     logDebug(`Provider is created for ${hash}`);
 
     const type = doc.getText("monaco");

@@ -6,7 +6,7 @@
     "SIGNALLING_SERVER": "0.0.0.0",
     "BACKEND_SERVER": "0.0.0.0", 
     "CLIENT": {
-        "SIGNALLING_SERVER": "localhost",
-        "BACKEND_SERVER": "localhost" 
+        "SIGNALLING_SERVER": "127.0.0.1",
+        "BACKEND_SERVER": "127.0.0.1" 
     }
 }

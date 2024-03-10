@@ -10,7 +10,7 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { userNamePtyAtom } from './atoms/MetadataAtom'
-import { addUsers  } from './utils/WebrtcUtils'
+import { addUsers, initCollabState  } from './utils/WebrtcUtils'
 import { navigateHook, cookiesHook, atomHook, createAtomInstance } from './utils/HookUtils'
 
 /**
@@ -69,10 +69,11 @@ export default function CollabHome() {
         const data = new FormData(event.currentTarget);
         const username = data.get('username');
         const roomId = data.get('roomid');
-        addUsers(username);
         setCookie("username", username, {
             path: "/"
         });
+        initCollabState();
+        addUsers(username);
         setUsername(username);
         navigateToApp(roomId)
     };
