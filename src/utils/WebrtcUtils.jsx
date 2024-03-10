@@ -18,10 +18,33 @@ const userKey = 'users';
 const roomKey = 'rooms'
 
 
-initContext();
-const ymap = doc.getMap('metadata');
-ymap.set(userKey, ymap.get(userKey) || new Y.Array(userKey));
-const roomYMap = doc.getMap(roomKey); 
+/**
+ * Which hold some important stat related information related to Colllab. 
+ * This state will be global to the app
+ */
+export class CollabState {
+
+    /**
+     * Constructor for collab state
+     *
+     */
+    constructor() {
+        const doc = createYDoc();
+        this.doc = doc;
+        initContext(this.doc);
+        const update = Y.encodeStateAsUpdate(doc);
+        Y.applyUpdate(doc, update);
+        this.ymap = doc.getMap('metadata');
+        this.ymap.set(userKey, this.ymap.get(userKey) || new Y.Array(userKey));
+        this.roomYMap = doc.getMap(roomKey); 
+    }
+}
+
+export function initCollabState() {
+    if (window.collabState == null) {
+        window.collabState = new CollabState();
+    }
+}
 
 /**
  * Stores the webrtc provider in a global cache.
@@ -75,24 +98,35 @@ function getOldProvider(roomId) {
  */
 export function createWebrtcProvider(hash, doc, wsParam) {
 
-    const oldProvider = getOldProvider(hash);
+    const provider =  new WebrtcProvider(hash, doc, wsParam);
+    addToCollabCache(hash, provider);
+    return provider;
+}
+
+/**
+ * Check if a connected cached webrtc provider exists
+ * for the room name
+ *
+ * @param {string} roomId - Room identification
+ * @returns {WebrtcProvider} Webrtc provider
+ */
+export function getConnectedOldProvider(roomId) {
+
+    const oldProvider = getOldProvider(roomId);
     if (oldProvider == undefined) {
-        logDebug(`Old provider for ${hash} doesn't exist`);
+        logDebug(`Old provider for ${roomId} doesn't exist`);
     } else {
 
-        logDebug(`Found old provider for ${hash}`);
+        logDebug(`Found old provider for ${roomId}`);
         if (oldProvider.connected) {
-            logDebug(`${hash} has a cached provider. Destroying it...`);
+            logDebug(`${roomId} has a cached provider. Destroying it...TODO:`);
+            return oldProvider;
         } else {
-            logDebug(`No old  web rtc provider for ${hash}. Creating a new one`);
+            logDebug(`No old  web rtc provider for ${roomId}. Creating a new one`);
         }
     }
 
-    const provider =  new WebrtcProvider(hash, doc, wsParam);
-    provider.on('status', (event) => { console.log(`Got a status update ${event.connected}`) })
-
-    // addToCollabCache(hash, provider);
-    return provider;
+    return null;
 }
 
 /**
@@ -101,8 +135,10 @@ export function createWebrtcProvider(hash, doc, wsParam) {
  * for the room
  *
  */
-function initContext() {
-    createWebrtcProvider(roomID, doc, { signaling: [`ws://${hostname}:${port}`] });
+
+function initContext(doc) {
+    logDebug(`Trying to init context for ${roomID}`);
+    new WebrtcProvider(roomID, doc, { signaling: [`ws://${hostname}:${port}`] });
 }
 
 /**
@@ -190,7 +226,8 @@ export function deleteRoom(roomId, callback) {
  */
 function addYUsersInWebRtc(userName) {
     updateYDoc();
-    const usersY = ymap.get(userKey);
+    const state = window.collabState;
+    const usersY = state.ymap.get(userKey);
     const users = usersY.toArray();
     users.push(userName);
     usersY.insert(0, users);
@@ -201,6 +238,7 @@ function addYUsersInWebRtc(userName) {
  *
  */
 function updateYDoc() {
+    const doc = window.collabState.doc;
     const update = Y.encodeStateAsUpdate(doc);
     Y.applyUpdate(doc, update);
 }
@@ -218,6 +256,7 @@ function updateYDoc() {
  */
 export function addRoomMetadata(room, pwd, admin, callback)  {
 
+    const roomYMap = window.collabState.roomYMap;
     roomYMap.set(room, admin);
 
     const reqBody = {
@@ -259,6 +298,8 @@ export function addRoomMetadata(room, pwd, admin, callback)  {
  * @returns {boolean} <code>true</code> if room exists
  */
 export function roomExists(room) {
+
+    const roomYMap = window.collabState.roomYMap;
     logDebug(`Room json ${JSON.stringify(roomYMap.toJSON())}`);
     const exists = !!roomYMap.get(room);
     logDebug(`Room exists : ${exists}`);
@@ -309,5 +350,6 @@ export function verifyRoomPwd(roomId, pwd, callback) {
  * @returns {Array} List of users who are online
  */
 export function getYUsersInWebrtc() {
+    const ymap = window.collabState.ymap;
     return ymap.get(userKey).toArray();
 }
