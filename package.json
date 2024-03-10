@@ -28,7 +28,7 @@
     "react-router-dom": "^6.15.0",
     "styled-components": "^5.3.11",
     "y-monaco": "^0.1.4",
-    "y-webrtc": "^10.2.5",
+    "y-webrtc": "^10.3.0",
     "yjs": "^13.6.7"
   },
   "devDependencies": {
@@ -50,13 +50,16 @@
     "web-vitals": "^2.1.4"
   },
   "jest": {
-    "testMatch": ["**/__tests__/**/*Test.[jt]s?(x)", "**/?(*.)+(spec|test).[jt]s?(x)"],
+    "testMatch": [
+      "**/__tests__/**/*Test.[jt]s?(x)",
+      "**/?(*.)+(spec|test).[jt]s?(x)"
+    ],
     "transformIgnorePatterns": [
       "/node_modules/(?!(yjs|lib0|y-webrtc|y-protocols|y-monaco|monaco-editor)).+\\.js$"
     ],
     "transform": {
       "^.+\\.jsx?$": "babel-jest"
-    }, 
+    },
     "moduleNameMapper": {
       "^monaco-editor$": "<rootDir>/node_modules/@monaco-editor/react"
     }
