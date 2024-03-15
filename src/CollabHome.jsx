@@ -105,9 +105,8 @@ export default function CollabHome() {
                         alignItems: 'center',
                     }}
                 >
-                    <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-                        <BorderColorIcon />
-                    </Avatar>
+                    <img width = "33em" src="/logo.svg">
+                    </img>
                     <Typography component="h1" variant="h5">
                         Collab
                     </Typography>
