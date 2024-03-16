@@ -1,11 +1,9 @@
 import * as React from 'react';
-import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
 import Link from '@mui/material/Link';
 import Box from '@mui/material/Box';
-import BorderColorIcon from '@mui/icons-material/BorderColor';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
@@ -35,7 +33,9 @@ function Copyright(props) {
 }
 
 const defaultTheme = createTheme({
-
+  palette: {
+    mode: 'dark',
+  },
 });
 
 const userIdTVErrorAtom = createAtomInstance(false);
