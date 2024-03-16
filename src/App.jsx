@@ -348,6 +348,7 @@ function App() {
           height="100vh"
           width="100vw"
           onMount={handleEditorDidMount}
+          theme = "vs-dark"
         />
       </div>
     </div>
