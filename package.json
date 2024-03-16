@@ -21,6 +21,7 @@
     "@mui/material": "^5.14.6",
     "@mui/styled-engine-sc": "^5.14.6",
     "babel-jest": "^29.7.0",
+    "firebase": "^10.9.0",
     "jotai": "^2.6.1",
     "react": "^18.2.0",
     "react-cookie": "^6.1.0",
