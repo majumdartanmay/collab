@@ -10,10 +10,14 @@ jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout repo
       - uses: actions/checkout@v4
-      - run: |
-          sudo apt-get update && sudo apt-get -y install vite
-          npm run build
+      - name: Setup Node
+        uses: actions/setup-node@v3
+      - name: Install dependencies
+        uses: bahmutov/npm-install@v1
+      - name: Build project
+        run: npm run build
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
