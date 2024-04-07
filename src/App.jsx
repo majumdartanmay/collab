@@ -1,4 +1,5 @@
 import Editor from "@monaco-editor/react"
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { navigateHook } from './utils/HookUtils'
 import * as Y from "yjs";
 import {bindMonaco } from './utils/DependencyUtils'
@@ -6,10 +7,17 @@ import config from '../backend/backend.json';
 import './App.css';
 import CollabPrompt from './utils/CollabPrompt';
 import { roomExists,  addRoomMetadata , verifyRoomPwd, logDebug, deleteRoom, createWebrtcProvider, initCollabState, getConnectedOldProvider } from './utils/WebrtcUtils'
+import NavBar from './NavBar'
 import {paramsHook, refHook, stateHook, cookiesHook } from './utils/HookUtils'
 import {validateRoomState, doHandleEditorMount} from './utils/AppUtils.jsx';
 import LinearProgress from '@mui/material/LinearProgress';
 import Fade from "@mui/material/Fade";
+
+const defaultTheme = createTheme({
+  palette: {
+    mode: 'dark',
+  },
+});
 
 /**
  * @typedef {Object} ComponentController
@@ -332,26 +340,24 @@ function App() {
 
 
   return (
-    <div id="app-container">
-
-      <Fade in = {loading} style={{ transitionDelay: loading ? "800ms" : "0ms",}} unmountOnExit> 
-
-        <LinearProgress />
-
-      </Fade>
-
-      <CollabPrompt data={admin ? createPasswordProps : requirePasswordProps} room={hash} open={promptOpened} error = {authFailedErrorMsg}/>
-
-      <div id="editor-container" data-testid="editor-container">
-        <Editor
-          data-testid = "monaco-editor-collab"
-          height="100vh"
-          width="100vw"
-          onMount={handleEditorDidMount}
-          theme = "vs-dark"
-        />
+    <ThemeProvider theme={defaultTheme}>
+      <div id="app-container">
+        <NavBar/>
+        <Fade in = {loading} style={{ transitionDelay: loading ? "800ms" : "0ms",}} unmountOnExit> 
+          <LinearProgress />
+        </Fade>
+        <CollabPrompt data={admin ? createPasswordProps : requirePasswordProps} room={hash} open={promptOpened} error = {authFailedErrorMsg}/>
+        <div id="editor-container" data-testid="editor-container">
+          <Editor
+            data-testid = "monaco-editor-collab"
+            height="100vh"
+            width="100vw"
+            onMount={handleEditorDidMount}
+            theme = "vs-dark"
+          />
+        </div>
       </div>
-    </div>
+    </ThemeProvider>
   )
 }
 
