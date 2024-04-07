@@ -7,11 +7,20 @@ import IconButton from '@mui/material/IconButton';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import { navigateHook,  } from './utils/HookUtils'
 
+/**
+ *
+ * Open github page
+ */
 function openGithub() {
   window.open("https://github.com/majumdartanmay/collab");
 }
 
-export default function DenseAppBar() {
+/**
+ *
+ * A component to have a centralized navbar
+ * in Collab
+ */
+export default function NavBar() {
 
   const navigate = navigateHook();
 
