@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { ThemeProvider } from '@mui/material/styles';
 import NavBar from './NavBar'
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -7,7 +8,7 @@ import Link from '@mui/material/Link';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import {createCollabTheme} from './utils/DependencyUtils';
 import { userNamePtyAtom } from './atoms/MetadataAtom'
 import { addUsers, initCollabState  } from './utils/WebrtcUtils'
 import { navigateHook, cookiesHook, atomHook, createAtomInstance } from './utils/HookUtils'
@@ -32,12 +33,6 @@ function Copyright(props) {
         </Typography>
     );
 }
-
-const defaultTheme = createTheme({
-  palette: {
-    mode: 'dark',
-  },
-});
 
 const userIdTVErrorAtom = createAtomInstance(false);
 const userIdTVErrorMsgAtom = createAtomInstance('');
@@ -95,7 +90,7 @@ export default function CollabHome() {
     }
 
     return (
-        <ThemeProvider theme={defaultTheme}>
+        <ThemeProvider theme={createCollabTheme()}>
             <NavBar/>
             <Container component="main" maxWidth="xs" >
                 <CssBaseline />
