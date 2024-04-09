@@ -1,4 +1,5 @@
 import { MonacoBinding } from 'y-monaco';
+import { createTheme } from '@mui/material/styles';
 
 
 /**
@@ -26,3 +27,16 @@ export function bindMonaco(yjsText, editorModel, editorSet, awareness) {
       editorSet,
       awareness);
 }
+
+/**
+ * Creates the default theme for collab
+ *
+ * @returns A complete, ready-to-use theme object.
+ */
+export function createCollabTheme() {
+  return createTheme({
+    palette: {
+      mode: 'dark',
+    },
+  });
+} 

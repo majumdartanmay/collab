@@ -5,7 +5,7 @@ import Toolbar from '@mui/material/Toolbar';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import GitHubIcon from '@mui/icons-material/GitHub';
-import { navigateHook,  } from './utils/HookUtils'
+import { navigateHook, } from './utils/HookUtils'
 
 /**
  *
@@ -28,11 +28,11 @@ export default function NavBar() {
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
         <Toolbar variant="dense">
-          <IconButton onClick = {() => {openGithub()}} edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 }}>
+          <IconButton onClick={() => { openGithub() }} edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 }}>
             <GitHubIcon />
           </IconButton>
-          <Button  color="secondary">About</Button>
-          <Button color="secondary" onClick = {() => {navigate("/")}}>Home</Button>
+          <Button color="secondary" onClick={() => { navigate("/about") }}>About</Button>
+          <Button color="secondary" onClick={() => { navigate("/") }}>Home</Button>
         </Toolbar>
       </AppBar>
     </Box>

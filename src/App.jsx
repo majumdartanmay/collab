@@ -1,8 +1,8 @@
 import Editor from "@monaco-editor/react"
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { ThemeProvider } from '@mui/material/styles';
 import { navigateHook } from './utils/HookUtils'
 import * as Y from "yjs";
-import {bindMonaco } from './utils/DependencyUtils'
+import {bindMonaco, createCollabTheme } from './utils/DependencyUtils'
 import config from '../backend/backend.json';
 import './App.css';
 import CollabPrompt from './utils/CollabPrompt';
@@ -12,12 +12,6 @@ import {paramsHook, refHook, stateHook, cookiesHook } from './utils/HookUtils'
 import {validateRoomState, doHandleEditorMount} from './utils/AppUtils.jsx';
 import LinearProgress from '@mui/material/LinearProgress';
 import Fade from "@mui/material/Fade";
-
-const defaultTheme = createTheme({
-  palette: {
-    mode: 'dark',
-  },
-});
 
 /**
  * @typedef {Object} ComponentController
@@ -340,7 +334,7 @@ function App() {
 
 
   return (
-    <ThemeProvider theme={defaultTheme}>
+    <ThemeProvider theme={createCollabTheme()}>
       <div id="app-container">
         <NavBar/>
         <Fade in = {loading} style={{ transitionDelay: loading ? "800ms" : "0ms",}} unmountOnExit> 
