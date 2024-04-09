@@ -2,7 +2,6 @@ import * as React from 'react';
 import NavBar from './NavBar'
 import { ThemeProvider } from '@mui/material/styles';
 import { createCollabTheme } from './utils/DependencyUtils'
-import './About.css';
 import { Container, Link } from '@mui/material';
 import CssBaseline from '@mui/material/CssBaseline';
 import Typography from '@mui/material/Typography';
