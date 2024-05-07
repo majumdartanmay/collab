@@ -2,13 +2,16 @@ import config from './backend.json' assert { type: "json" };
 import DB from './db.json' assert { type: "json" };
 import cors from 'cors'
 import express from 'express'
-import mysql from 'mysql2/promise' 
 import bcrypt from 'bcryptjs'
+import process from 'node:process';
+import sqlite3 from 'sqlite3';
+import fs from 'fs';
 
 const app = express();
 const port = config.AUTH_PORT;
 const database = DB.database;
 const tableName = DB.usertable;
+const sqlliteDBName = "collab.db";
 
 app.use(express.json());
 
@@ -76,19 +79,44 @@ async function query(sql, params) {
 
 async function createConnection() {
 
-    const connection = await mysql.createConnection({
-        host: DB.service_name,
-        user: DB.user,
-        password: DB.password
+    if (fs.existsSync(sqlliteDBName)) {
+        return new sqlite3.Database(sqlliteDBName);
+    }
+
+    const db = new sqlite3.Database(sqlliteDBName, (error) => {
+        if (error) {
+            console.error(error);
+            process.exit(-1);
+        }
     });
 
-    return connection;
+    createTable(db);
+    console.log("SQL Connection created");
+    return db;
+}
+
+async function createTable(db) {
+    db.exec(`
+                CREATE TABLE users (
+                    roomId VARCHAR(255) NOT NULL,
+                    secret VARCHAR(255) NOT NULL,
+                    username VARCHAR(255) NOT NULL,
+                    PRIMARY KEY (roomId, username)
+                );
+            `);
 }
 
 async function preparedQuery(sql, params = []) {
     const connection = await createConnection(); 
-    await connection.query(sql, params);
-    connection.end();
+    connection.run(
+        sql,
+        params,
+        function (error) {
+            if (error) {
+                console.error(error.message);
+            }
+        }
+    );
 }
 
 async function getSecret(roomId) {
@@ -115,3 +143,4 @@ app.listen(port, config.BACKEND_SERVER , () => {
     Call http://${config.BACKEND_SERVER}:${port}/healthcheck to see 
     if we have established DB connectivity`);
 });
+
