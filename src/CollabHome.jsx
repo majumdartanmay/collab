@@ -66,7 +66,8 @@ export default function CollabHome() {
         const username = data.get('username');
         const roomId = data.get('roomid');
         setCookie("username", username, {
-            path: "/"
+            path: "/",
+            sameSite: true
         });
         initCollabState();
         addUsers(username);

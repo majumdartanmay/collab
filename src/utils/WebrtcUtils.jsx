@@ -138,6 +138,7 @@ export function getConnectedOldProvider(roomId) {
 
 function initContext(doc) {
     logDebug(`Trying to init context for ${roomID}`);
+    logDebug(`Signalling server : ws://${hostname}:${port}`);
     new WebrtcProvider(roomID, doc, { signaling: [`ws://${hostname}:${port}`] });
 }
 

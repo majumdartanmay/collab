@@ -229,7 +229,7 @@ function App() {
     if (!exists) {
       deleteRoom(roomName, (success, msg) => {
         if (success == 0) {
-          doHandleUserAuth(exists);
+          doHandleUserAuth(false);
         }else {
           alert("Unable to start collab " + msg);
         }
