@@ -7,7 +7,7 @@
             "name": "Application Server remote instance",
             "port": 9229,
             "trace": true,
-            "localRoot": "${workspaceRoot}\\backend",
+            "localRoot": "${workspaceRoot}/backend",
             "remoteRoot": "/opt/app"
         },
         {
@@ -16,7 +16,7 @@
             "name": "Application Server remote instance",
             "port": 9229,
             "trace": true,
-            "localRoot": "${workspaceFolder}\\backend",
+            "localRoot": "${workspaceFolder}/backend",
             "remoteRoot": "/opt/app"
         },
         {
@@ -25,7 +25,7 @@
             "name": "Signalling Server remote instance",
             "port": 9230,
             "trace": true,
-            "localRoot": "${workspaceRoot}\\backend",
+            "localRoot": "${workspaceRoot}/backend",
             "remoteRoot": "/opt/app"
         },
         {
@@ -34,7 +34,7 @@
             "name": "Signalling Server remote instance",
             "port": 9230,
             "trace": true,
-            "localRoot": "${workspaceFolder}\\backend",
+            "localRoot": "${workspaceFolder}/backend",
             "remoteRoot": "/opt/app"
         }
     ], 

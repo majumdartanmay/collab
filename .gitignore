@@ -28,4 +28,4 @@ dist-ssr
 schema.sql
 docker-compose.yml
 /coverage
-
+/backend/collab.db
