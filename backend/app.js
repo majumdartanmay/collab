@@ -1,5 +1,3 @@
-import config from './backend.json' assert { type: "json" };
-import DB from './db.json' assert { type: "json" };
 import cors from 'cors'
 import express from 'express'
 import bcrypt from 'bcryptjs'
@@ -7,6 +5,9 @@ import process from 'node:process';
 import sqlite3 from 'sqlite3';
 import fs from 'fs';
 
+const loadJSON = (path) => JSON.parse(fs.readFileSync(new URL(path, import.meta.url)));
+const DB = loadJSON('./db.json');
+const config = loadJSON('./backend.json');
 const app = express();
 const port = config.AUTH_PORT;
 const database = DB.database;

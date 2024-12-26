@@ -1,6 +1,11 @@
-import config from './backend.json' assert { type: "json" };
-import DB from './db.json' assert { type: "json" };
+// import config from './backend.json' assert { type: "json" };
+// import DB from './db.json' assert { type: "json" };
 import fs from 'fs'
+const loadJSON = (path) => JSON.parse(fs.readFileSync(new URL(path, import.meta.url)));
+const DB = loadJSON('./db.json');
+const config = loadJSON('./backend.json');
+
+console.debug(`DB : ${JSON.stringify(DB)}`);
 
 const replacementMap = {
   "<MYSQL_ROOT_PWD>": DB.root_password,
