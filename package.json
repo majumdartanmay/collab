@@ -11,7 +11,7 @@
     "backend": "cd backend && npm start",
     "test_watch": "react-scripts test --watchAll --coverage --detectOpenHandles",
     "test": "react-scripts test --watchAll=false --coverage --detectOpenHandles",
-    "run_all": "npm-run-all --parallel dev backend"
+    "all": "npm-run-all --parallel dev backend"
   },
   "dependencies": {
     "@emotion/react": "^11.11.1",

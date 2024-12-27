@@ -18,13 +18,27 @@ This is light weight realtime text collabation tool. It has the following key co
 - node v23.4.0
 - npm 11.0.0
 
-## Starting the backend
+## Building the full application
+
+These commands will start the front-end service as well as the backend service
+
+```bash
+npm install
+cd backend 
+npm install
+cd ..
+npm run all
+```
+
+## Starting just the backend 
 
 The backend has mainly 2 components. Signalling server, authentication server. The below steps will start both the signalling server and the auth server.
-```
+
+```bash
 cd backend
 npm install
 npm start
+```
 
 ### Configuring the authentication backend server
 
@@ -50,7 +64,9 @@ To configure the details of this server go to [backend.json](/backend/backend.js
 
 These properties are relevant for the authentication service. App.js will run in the AUTH_PORT.
 
-### Configuring DB details
+### Configuring DB details 
+
+** This is optional, if you are happy with the default values **
 
 To configure the details of the SQLite DB that will be created go to [db.json](/backend/db.json) and configure the listed details
 
